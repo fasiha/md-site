@@ -1,8 +1,8 @@
 "use strict";
 
 var fs = require('fs');
+var path = require('path');
 var yaml = require('js-yaml');
-// var Promise = require("bluebird");
 var find = require('find');
 var spawnSync = require('child_process').spawnSync;
 
@@ -73,7 +73,10 @@ function buildOneMarkdown(meta, prevMeta, nextMeta, metas, tagsToMetas) {
   head += '\n</head>\n';
   head += meta.banner ? banner(meta.banner) : '';
   head += headline(meta.title);
-  head += subline(meta.date, meta.tags);
+  if (prevMeta || nextMeta) {
+    // Janky way to tell if this is a non-blog-post i.e., main or about
+    head += subline(meta.date, meta.tags);
+  }
 
   fs.writeFileSync(outfile, '');
   fs.appendFileSync(outfile, head);
@@ -85,10 +88,10 @@ function buildOneMarkdown(meta, prevMeta, nextMeta, metas, tagsToMetas) {
   }
 }
 
-var path = require('path');
 function filepathToAbspath(filepath) {
   return path.resolve('/', PREPATH, filepath).replace(/index.html$/, '');
 }
+
 function prevNextToFoot(prevMeta, nextMeta) {
   if (prevMeta || nextMeta) {
     // console.log(prevMeta, nextMeta);
