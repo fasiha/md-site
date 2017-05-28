@@ -4,6 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "find": "^0.2.7",
+    "js-yaml": "^3.8.4",
     "pandoc-filter": "^0.1.6"
   }
 }
