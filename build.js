@@ -6,7 +6,7 @@ var yaml = require('js-yaml');
 var find = require('find');
 var spawnSync = require('child_process').spawnSync;
 
-var PREPATH = ''; // i.e., if site lives at foo.edu/~me, RELPATH='~me'.
+var PREPATH = 'md-site'; // i.e., if site lives at foo.edu/~me, RELPATH='~me'.
 
 var css = '<style>' + fs.readFileSync('modest.css', 'utf8') + '</style>\n';
 var plotlyPreamble =
