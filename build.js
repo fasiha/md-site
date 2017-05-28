@@ -9,7 +9,19 @@ var spawnSync = require('child_process').spawnSync;
 var PREPATH = ''; // i.e., if site lives at foo.edu/~me, RELPATH='~me'.
 
 var css = '<style>' + fs.readFileSync('modest.css', 'utf8') + '</style>\n';
-
+var plotlyPreamble =
+    `<script src="${
+                    filepathToAbspath('assets/plotly-basic-1.27.1.min.js')
+                  }" charset="utf-8"></script>\n`;
+var mathjaxPreamble = `<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } },
+});
+</script>
+<script type="text/javascript" async charset="utf-8"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+`;
 var defaultMeta = {
   title : 'Insight≠Numbers',
   description : 'A blog by Ahmed Fasih',
@@ -18,7 +30,9 @@ var defaultMeta = {
   banner : 'glen-helen.jpg',
   socialBanner : '',
   tags : [],
-  draft : false,
+  author : 'Ahmed Fasih',
+  plotly : false,
+  mathjax : false
 };
 
 var articles = new Map([]);
@@ -64,22 +78,37 @@ function buildOneMarkdown(meta, prevMeta, nextMeta, metas, tagsToMetas) {
           ],
           {input : undefined, encoding : 'utf8'})
           .stdout;
+  if (meta.mathjax) {
+    html = html.replace(/\\&amp;/g, '&');
+  }
 
   var head = '<head><meta charset="utf-8" />\n';
   head += `<title>${meta.title}</title>\n`
   head += social(outfile, meta.title, meta.description,
                  meta.socialBanner || meta.banner);
   head += css;
+  if (meta.plotly) {
+    head += plotlyPreamble;
+  }
+  if (meta.mathjax) {
+    head += mathjaxPreamble;
+  }
   head += '\n</head>\n';
+
+  // HEAD DONE!!!
+
   head += meta.banner ? banner(meta.banner) : '';
   head += headline(meta.title);
   if (prevMeta || nextMeta) {
     // Janky way to tell if this is a non-blog-post i.e., main or about
-    head += subline(meta.date, meta.tags);
+    head += subline(meta);
   }
   if (filepath === 'index.md') {
     head += postIndex(metas);
   }
+
+  // ALL STRINGS BUILT!
+
   fs.writeFileSync(outfile, '');
   fs.appendFileSync(outfile, head);
   fs.appendFileSync(outfile, html);
@@ -164,17 +193,18 @@ function fileToMeta(filepath) {
   return meta;
 }
 
-function subline(date, tags) {
-  var text = '';
-  var tagtext = tags.map(s => `‘${s}’`).join('—');
-  if (date && (tags && tags.length)) {
-    text = `Updated on ${date.toUTCString()}, tagged with ${tagtext}.`;
-  } else if (date) {
-    text = `Updated on ${date.toUTCString()}.`;
-  } else if (tags && tags.length) {
-    text = `Tagged with ${tagtext}.`
+function subline(meta) {
+  var text =
+      `By <a href="${filepathToAbspath('')}#contact">${meta.author}</a>. `;
+  var tagtext = meta.tags.map(s => `‘${s}’`).join('—');
+  if (meta.date && (meta.tags && meta.tags.length)) {
+    text += `Updated on ${meta.date.toUTCString()}, tagged with ${tagtext}.`;
+  } else if (meta.date) {
+    text += `Updated on ${meta.date.toUTCString()}.`;
+  } else if (meta.tags && meta.tags.length) {
+    text += `Tagged with ${tagtext}.`
   }
-  return text ? `<p><em>${text}</em></p>` : '';
+  return `<p><em>${text}</em></p>`;
 }
 
 function banner(url) {
