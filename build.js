@@ -31,7 +31,7 @@ function gatherIntel(filepath) {
 find.file(/\.md$/, '.', md => {
   md = md.filter(s => s.indexOf('node_modules') !== 0);
   md.forEach(gatherIntel);
-  var metas = Array.from(articles.values()).sort((a, b) => a.date - b.date);
+  var metas = Array.from(articles.values()).sort((a, b) => -(a.date - b.date));
 
   var postMetas = metas.filter(meta => meta.filepath.indexOf('post/') === 0);
   var nonpostMetas = metas.filter(meta => meta.filepath.indexOf('post/') !== 0);
@@ -39,11 +39,11 @@ find.file(/\.md$/, '.', md => {
   var tagsToMetas = groupBys(postMetas, meta => meta.tags);
 
   postMetas.forEach((meta, midx) => {
-    buildOneMarkdown(meta, postMetas[midx - 1], postMetas[midx + 1], postMetas,
+    buildOneMarkdown(meta, postMetas[midx + 1], postMetas[midx - 1], postMetas,
                      tagsToMetas);
   });
   nonpostMetas.forEach((meta, midx) => {
-    buildOneMarkdown(meta, null, null, metas, tagsToMetas);
+    buildOneMarkdown(meta, null, null, postMetas, tagsToMetas);
   });
 });
 
@@ -77,7 +77,9 @@ function buildOneMarkdown(meta, prevMeta, nextMeta, metas, tagsToMetas) {
     // Janky way to tell if this is a non-blog-post i.e., main or about
     head += subline(meta.date, meta.tags);
   }
-
+  if (filepath === 'index.md') {
+    head += postIndex(metas);
+  }
   fs.writeFileSync(outfile, '');
   fs.appendFileSync(outfile, head);
   fs.appendFileSync(outfile, html);
@@ -117,6 +119,31 @@ function prevNextToFoot(prevMeta, nextMeta) {
     return foothtml;
   }
   return '';
+}
+
+function shortDate(d) {
+  return `${d.getUTCFullYear()}/${d.getUTCMonth() + 1}/${d.getUTCDate()}`;
+}
+function postIndex(metas) {
+  var md =
+      '## All posts\n' +
+      metas
+          .map(meta => `- [${meta.title}](${
+                                            filepathToAbspath(meta.outfile)
+                                          }) (${
+                                                shortDate(meta.date)
+                                              }, ${meta.tags.join('/')})\n`)
+          .join('');
+  var index =
+      spawnSync('pandoc',
+                [
+                  '-f',
+                  'markdown_github-hard_line_breaks+markdown_in_html_blocks',
+                  '-t', 'html5'
+                ],
+                {input : md, encoding : 'utf8'})
+          .stdout;
+  return index;
 }
 
 function fileToMeta(filepath) {
