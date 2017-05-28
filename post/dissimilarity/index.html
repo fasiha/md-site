@@ -1,0 +1,409 @@
+<head><meta charset="utf-8" />
+<title>Conditional probability and the criterion of dissimilarity</title>
+<meta name="description" content="Biblical criticism and Bayes theorem. What could go wrong?" />
+<meta name="twitter:card" value="summary">
+<meta property="og:title" content="Conditional probability and the criterion of dissimilarity" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="post/dissimilarity/index.html" />
+<meta property="og:image" content="wilderness.jpg" />
+<meta property="og:description" content="Biblical criticism and Bayes theorem. What could go wrong?" />
+<style>@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+  .parallax {
+    background-attachment: scroll;
+  }
+}
+
+pre,
+code {
+  font-family: Menlo, Monaco, Consolas, Inconsolata, "Andale Mono", "Fira Code", "Lucida Console", "Lucida Sans Typewriter", "Courier New", monospace;
+}
+
+pre {
+  padding: .5rem;
+  line-height: 1.25;
+  overflow-x: scroll;
+}
+
+a,
+a:visited {
+  color: #3498db;
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: #2980b9;
+}
+
+.modest-no-decoration {
+  text-decoration: none;
+}
+
+html {
+  font-size: 12px;
+}
+
+@media screen and (min-width: 32rem) and (max-width: 48rem) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 48rem) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  line-height: 1.85;
+}
+
+p,
+.modest-p {
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
+}
+
+h1,
+.modest-h1,
+h2,
+.modest-h2,
+h3,
+.modest-h3,
+h4,
+.modest-h4 {
+  margin: 1.414rem 0 .5rem;
+  font-weight: inherit;
+  line-height: 1.42;
+}
+
+h1,
+.modest-h1 {
+  margin-top: 0;
+  font-size: 3.998rem;
+}
+
+h2,
+.modest-h2 {
+  font-size: 2.827rem;
+}
+
+h3,
+.modest-h3 {
+  font-size: 1.999rem;
+}
+
+h4,
+.modest-h4 {
+  font-size: 1.414rem;
+}
+
+h5,
+.modest-h5 {
+  font-size: 1.121rem;
+}
+
+h6,
+.modest-h6 {
+  font-size: .88rem;
+}
+
+small,
+.modest-small {
+  font-size: .707em;
+}
+
+/* https://github.com/mrmrs/fluidity */
+
+img,
+canvas,
+iframe,
+video,
+svg,
+select,
+textarea {
+  max-width: 100%;
+}
+
+html {
+  font-size: 18px;
+  max-width: 100%;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  color: #444;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  margin: 0 auto;
+  max-width: 48rem;
+  line-height: 1.45;
+  padding: 0 .25rem .25rem;
+}
+
+h1,
+h2,
+h3 {
+  border-bottom: 2px solid #fafafa;
+  margin-bottom: 1.15rem;
+  padding-bottom: .5rem;
+  text-align: center;
+}
+
+blockquote {
+  border-left: 8px solid #fafafa;
+  padding: 1rem;
+}
+
+pre,
+code {
+  background-color: #fafafa;
+}
+
+figure {
+  position: relative;
+  text-align: center;
+}
+figcaption {
+  color: #999;
+  font-size: 0.9em;
+  margin-top: 0.5em;
+}
+
+/* https://css-tricks.com/full-width-containers-limited-width-parents/ */
+.full-width {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+.no-top {
+  margin-top: 0px;
+  padding-top:0px;
+}
+</style>
+<script src="/assets/plotly-basic-1.27.1.min.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } },
+});
+</script>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+
+</head>
+<figure class="full-width no-top"><img src="wilderness.jpg"></figure><h1>Conditional probability and the criterion of dissimilarity</h1><p><em>By <a href="/#contact">Ahmed Fasih</a>. Updated on Sat, 22 Oct 2016 04:40:30 GMT, tagged with ‘math’—‘history’.</em></p><h2 id="introduction">Introduction</h2>
+<p>I wasn’t familiar with <em>the criterion of dissimilarity</em> when I read about it in Bart Ehrman’s <em>Did Jesus Exist?</em> (2013; the answer to the question is “yes” in case you were wondering <a href="http://www.npr.org/2012/04/01/149462376/did-jesus-exist-a-historian-makes-his-case">npr.org</a>):</p>
+<blockquote>
+<p>when we encounter a story about Jesus that does not support an early Christian agenda or that seems to run contrary to what the early Christians would have wanted to say about Jesus, … the story is more likely to be historically reliable since it is less likely to have been made up. (Chapter 8)</p>
+</blockquote>
+<p>The technique sounds like a legitimized use of ad hominem attacks. An ad hominem attack is the (usually fallacious) rhetorical–logical–cognitive shortcut where, instead of evaluating someone’s statement for correctness, you assume it’s wrong if you dislike the person, or right if you like them. I always think of the following example: “Elected officials are not paid enough,” says your Senator or Member of Parliament or Diet member. You reply, “<em>Of course</em> you’d say that—you’re an elected official and want a higher salary.” The statement may be true, but instead of evaluating it properly, you conclude it’s false because of who said it.</p>
+<p>(Ad hominem attacks are found in lists of cognitive fallacies, but the technique is often a very good heuristic. As Nassim Taleb says, “Don’t ask a barber if you need a haircut.”)</p>
+<p>The criterion is used by historians when there are unreliable sources for an event. When an ancient writer makes a claim that they would want to be true, i.e., that serves their agenda, then we ought to be less inclined to believe it to be true.</p>
+<p>This is apparently a controversial tool among historians. To me, someone who is not a professional historian, but who has taken a few statistics courses in grad school, this seemed like something to which we could apply conditional probability. I know that conditional probability often gives very counterintuitive results (the classic case is the confusion among doctors about medical tests due to the interplay between the probability of false alarm versus probability of missed detection), so perhaps there’s a numeric angle to the controversy.</p>
+<h2 id="a-simplified-example-telling-the-truth">A simplified example: telling the truth</h2>
+<p>I tried writing out Bayes rule for events like “useful if true” and “made up”, but it was difficult for me to be sure these events were really random variables. It’s easy to misapply conditional probability and Bayes rule for real world problems (i.e., outside statistics classes) because probability is so subtle and difficult to get right.</p>
+<p>So here’s a simplified example that I came up with to understand the problem a little better: imagine a psychological experiment on lying.</p>
+<p>A participant is asked to predict whether a coin will land heads or tails, and then asked for flip it and tell us whether it came heads or tails. The participant is maybe rewarded for correct “predictions” but we don’t ask to see the coin, so the participant can lie to us. Unknown to them, though, we have a secret camera recording the actual results, so we can ask the question: assuming the participant predicted heads before flipping the coin, what’s the probability that it actually landed heads if they said “heads”? What is \[ p(\text{heads } | \text{ says heads}) ?\] (In this notation, \(p(A | B)\) is read “probability of event A given we know event B happened”.) This is straightforward Bayes rule, which says \[\begin{equation} p(A | B) = \frac{p(B | A) \cdot p(A)}{p(B)}. \label{eq:bayes} \end{equation} \] I know some people’s eyes glaze over when they see a string of mathematical gibberish like this—mine certainly do, and my eyes skip it to see if the prose discussion below the equation will let me get away with not trying to parse and understand the equation. I will try very hard to give meaningful prose explanations of each mathematical equation that give you the courage to return the math and slay it. In this case, however, it may be easier to plug in actual events instead of \(A\) and \(B\) before explaining anything: \[ \begin{align} p(\text{H } | \text{says H}) &= \frac{ p(\text{says H } | \text{ H}) \cdot p(\text{H}) }{p(\text{says H})} \label{eq:bayes-heads} \\ &= \frac{ p(\text{says H } | \text{ H}) \cdot p(\text{H}) }{p(\text{says H } | \text{ H}) \cdot p(\text{H}) + p(\text{says H } | \text{ T}) \cdot p(\text{T}) }. \label{eq:total-prob-heads} \end{align} \] Hmm, that might be even more impenetrable than with abstract \(A\)s and \(B\)s, but it’ll be easier to explain. Things to note:</p>
+<ul>
+<li>We use \(H\) to mean “heads” or “heads actually landed”.</li>
+<li>In \eqref{eq:bayes-heads}, we’ve just plugged in \((A = \text{H})\) and \((B = \text{says H})\) into the original Bayes rule equation \eqref{eq:bayes}.</li>
+<li>\eqref{eq:total-prob-heads} has the same numerator as \eqref{eq:bayes-heads}. <em>But</em> the denominator has expanded via the <a href="https://en.wikipedia.org/wiki/Law_of_total_probability">law of total probability</a>. I did this because, eventually, we’ll want to replace these probabilities with numbers, and I have no idea what the raw probability is that someone will say “heads” assuming nothing other than that they’ve predicted heads. But using total probability, we can express \(p(\text{says H})\) in terms of conditional probabilities and coin-flip probabilities—I can actually assign reasonable numbers to all the probabilities in \eqref{eq:total-prob-heads}, but couldn’t in \eqref{eq:bayes-heads}.</li>
+</ul>
+<p>Assuming \eqref{eq:total-prob-heads} is legitimate, we can say the following:</p>
+<ul>
+<li>\(p(\text{H}) = p(\text{T}) = 0.5\), that is, the probability of heads or tails is 0.5 for this fair coin.</li>
+<li>\(p(\text{says H } | \text{ H}) = 1\). This means that if heads actually came up, the participant is guaranteed to say “heads came up”. (Recall that we’re assuming they predicted “heads will come up” before flipping the coin.) The participant won’t lie if it’ll harm them.</li>
+<li>The last probability, \(p(\text{says H } | \text{ T}) = p_{\text{lie}}\), is the probability of a lie. This means the participant predicted heads, flipped tails, but lied and said “heads”. \(p_{\text{lie}}\) we’ll leave as a variable. \(p_{\text{lie}} = 0\) means this participant is hyper-truthful. \(p_{\text{lie}} = 1\) when a participant is a compulsive liar.</li>
+</ul>
+<p>With these algebraic machinations, we can answer the question at the beginning of this section. The probability that a coin actually landed heads given the participant said heads (recall we assume they predicted heads beforehand) is \[ \begin{equation} p(\text{H } | \text{ says H}) = \frac{0.5}{0.5 + 0.5 p_{\text{lie}}} = \frac{1}{1 + p_{\text{lie}}}. \end{equation} \] For a hyper-truthful person, \(p_{\text{lie}} = 0\) so we can be 100% sure that if they say “heads came up,” heads really did come up: \(p(\text{H } | \text{ says H}) = 1\). For a compulsive liar, \(p_{\text{lie}} = 1\), and the odds are 50-50 that the coin actually came up heads when they say it did: \(p(\text{H } | \text{ says H}) = 0.5\) which is also the prior probability of heads coming down—just ignore anything an inveterate liar says.</p>
+<h2 id="a-more-complicated-example-believing-a-historic-event">A more complicated example: believing a historic event</h2>
+<p>The case above, lying about coin flips, is simpler than fabricating stories. But it turns out we can adapt the total probability equation of \eqref{eq:total-prob-heads} to this more general problem quite nicely. Let “H” mean “a historic event H <em>actually</em> happened”. Let “says H” mean “a historic source says a historic event H happened”. Then we want to know \(p(\text{H } | \text{ says H})\): we have read a story H about a historic person, and we want to know the probability that it actually happened.</p>
+<p>Rewrite Bayes rule with total probability of \eqref{eq:total-prob-heads}: \[ \begin{equation} p(\text{H } | \text{ says H}) = \frac{ p(\text{says H } | \text{ H}) \cdot p(\text{H}) }{ p(\text{says H } | \text{ H}) \cdot p(\text{H}) + p(\text{says H } | \text{ not H}) \cdot p(\text{not H}) }. \label{eq:tp2} \end{equation} \] All that’s changed from \eqref{eq:total-prob-heads} to \eqref{eq:tp2} is that insted of “T” we have “not H”, which means “historic event H didn’t really happen”, i.e., it was fabricated if anyone says it did happen. All four probabilities here are free in this more general case, since we have historic events instead of coin flips:</p>
+<p>a. \(p(\text{says H } | \text{ H}) = p_\text{useful}\) is the probability that, given an event H actually happened, that H would be recorded. I call this the “probability of usefulness”—if H is the event that Christ ate figs for lunch on Passover, 32 C.E., it’s unlikely to be recorded by any contemporary source: \(p_\text{useful}\) would be close to 0 for this H. However, \(p_\text{useful}\) may be closer to 1 for the event H that Christ entered Jerusalem days before the crucifixion. It depends on what H is.</p>
+<p>b. \(p(\text{H}) = p_\text{plausible}\) is the probability that event H truly happened, independent of whether it was recorded or who recorded it. By the complement rule of probability, \(p(\text{not H}) = 1- p_\text{plausible}\). This is a little abstract, and as we’ll see, the number assigned to this probability doesn’t really affect our conclusion about the criterion of dissimilarity, but I take this probability to mean how plausible the event H is on general principles, based on what we know about the time period, about science, etc.</p>
+<p>c. Finally, \(p(\text{says H } | \text{ not H}) = p_\text{lie}\), is the probability that the event H was fabricated. H here might be Luke’s claim that “Christ was born in Bethlehem”. Assuming we know that Christ was born in Nazareth (“a tiny hamlet riddled with poverty” via Ehrman) independent of Luke, what is the probability that Luke would say otherwise? Possibly non-zero if he wanted his narrative to fit Micah’s earlier predictions regarding the birthplace of the savior. It is in this probability that we encode ad hominem beliefs about what Luke <em>would</em> say. <strong>Note well</strong> that \(p(\text{says H } | \text{ not H})\) is <em>not</em> the complement of \(p(\text{says H } | \text{ H})\). These two numbers are totally independent and capture separate aspects of the problem—the latter speaks to how likely a true event is written down, the former how likely a fabrication is made.</p>
+<p>These three probabilities specify three different aspects of the underlying model. If we can come up with numbers for all three, we can answer the burning question: what are the odds that a story about Christ is true? \[ \begin{equation} p(\text{H } | \text{ says H}) = \frac{ p_\text{useful} \cdot p_\text{plausible} }{ p_\text{useful} \cdot p_\text{plausible} + p_\text{lie} \cdot (1 - p_\text{plausible}) }. \label{eq:tp3} \end{equation} \]</p>
+<p>Said this way it’s not clear how valid the dissimilarity criterion is. But after looking at the behavior of \eqref{eq:tp3} for various combinations of</p>
+<ul>
+<li>\(p_\text{useful} = p(\text{says H } | \text{ H})\),</li>
+<li>\(p_\text{plausible} = p(\text{H}) \), and</li>
+<li>\(p_\text{lie} = p(\text{says H } | \text{ not H})\),</li>
+</ul>
+<p>I convinced myself of its validity. We can’t visualize this function of three dimensions easily, but here’s a sequence of charts that I think will convince you.</p>
+<p>Let \(p_\text{useful} = p(\text{says H } | \text{ H}) = 1\), that is, let’s assume H is the kind of story that, assuming it really happened, would definitely be worth recording accurately. Let’s see the behavior of the ultimate probability \(p(\text{H } | \text{ says H})\), of whether to believe a historical source saying H, as we vary \(p_\text{lie}\) and \(p_\text{plausible}\):</p>
+<div id="myDiv" style="width: 90%; height: 400px;">
+</div>
+<p>What matters here is not the individual numbers, or an individual point along one of these lines, but rather the observation that, for <em>all</em> plausibility probabilities, the ultimate probability of whether to believe H or not goes down as the probability of fabrication, \(p_\text{lie}\) goes up. The highest and lowest lines, of \(p_\text{lie} = 0\) (incorruptible authors) and \(p_\text{lie} = 1\) (fiction writers) are meant only to bound the space of allowable results. If there’s even a suspicion that \(p_\text{lie} = p(\text{says H } | \text{ not H}) &lt; 1\), that a historical author may have written down something, H, that didn’t happen, like Luke regarding the birthplace of Christ, that will decrease our belief in H. If H is already implausible, i.e., \(p_\text{plausible} \ll 1 \), our belief drops a ton. If H is neither plausible nor implausible, \(p_\text{plausible} \approx 0.5\), our belief drops a middling amount. If H is quite plausible, \(p_\text{plausible} ≲ 1\), our belief drops a miniscule amount. The point is that it drops—the historians can argue about how much it drops (i.e., what \(p_\text{plausible}\) really is).</p>
+<p>(A technical note not of interest to the general reader: note that for \(p_\text{lie} = p(\text{says H } | \text{ not H}) = 1\), implying the historical source is a complete fiction, our ultimate probability of believing H \(p(\text{H } | \text{ says H}) = p_\text{plausible}\). Our belief in H is unchanged by knowing that an inveterate liar said H is true. Again, this is a technical sanity check—I doubt any historical writer lies at this point.)</p>
+<p>That was for \(p_\text{useful} = p(\text{says H } | \text{ H}) = 1\). What about less useful stories H, which assuming are true were less likely to be recorded?</p>
+<div id="myDiv-2" style="width: 90%; height: 400px;">
+</div>
+<p>Above, I’ve shown the ultimate probability of believing H when \(p_\text{useful} = p(\text{says H } | \text{ H}) = 0.5\), meaning H is mundane enough that a contemporary may or may not record it. This lower usefulness probability depresses all the curves (except for the hyper-truthful assumption of \(p_\text{lie} = 0\)), but the basic trend from before holds here: if there is any possibility that a historic source might fabricate an event H, our belief in that event should decrease.</p>
+<p>(Another technical note of no interest to the general reader: as \(p_\text{useful}\) drops, the lower bound on our ultimate probability \(p(\text{H } | \text{ says H}) &lt; p_\text{plausible}\). Even if event H is 50% plausible, i.e., \(p(H) = 0.5\), and reported by a compulsive liar (\(p_\text{lie} = p(\text{says H } | \text{ not H}) = 1\)), our belief in H’s accuracy is less than 50%, because it was not very likely to have been recorded in the first place.)</p>
+<p>As an extreme case, consider \(p_\text{useful} = p(\text{says H } | \text{ H}) = 0.1\), i.e., the situation where Christ ate figs for lunch on Passover 32 C.E.—intended to be a very mundane fact that a contemporary is very unlikely to record (sorry if that example turns out to be actually highly useful). Let’s just confirm that the same principle holds: that our belief in the event H should drop if there’s any likelihood of the author inventing H.</p>
+<div id="myDiv-3" style="width: 90%; height: 400px;">
+</div>
+<p>Indeed this is the case.</p>
+<p>This proved a tidy point but I now must ask myself—did I really need Bayes rule to tell me (slightly) disbelieve something the (occasional) liar wrote? Well, conditional probability is very tricky and can yield surprising results sometimes, but not here—the math agrees with common sense. But now I realize that \(p_\text{lie} = p(\text{says H } | \text{ not H})\), the likelihood of the author inventing H, and \(p(\text{H } | \text{ says H})\), whether we should believe the event or not, don’t quite match up with Ehrman’s statement of the dissimilarity criterion. Paraphrasing the quote at the top—if H is something that the author would <em>want</em> to be true, then the criterion advises more disbelief. Our probability model doesn’t consider whether H is “helpful” to the author or not.</p>
+<h2 id="the-final-example-the-dissimilarity-criterion">The final example: the dissimilarity criterion</h2>
+<p>Above, in \eqref{eq:tp3}, we expressed \(p(\text{H } | \text{ says H})\), the probability that event H is true given that a historic source reports it as truth, as a function of three variables:</p>
+<ul>
+<li>\(p_\text{useful} = p(\text{says H } | \text{ H})\), the likelihood that assuming H <em>is</em> true, the author would have recorded it;</li>
+<li>\(p_\text{plausible} = p(\text{H}) \), the likelihood that H could have happened even if we never read about H in a historical source; and</li>
+<li>\(p_\text{lie} = p(\text{says H } | \text{ not H})\), the probability that, even though H was untrue, the author wrote it as truth anyway.</li>
+</ul>
+<p>We can add the notion of whether H “helps” the author’s case or not be expanding the belief probability \(p(\text{H } | \text{ says H})\): \[ \begin{align} p(\text{H } | \text{ says H}) = \begin{cases} \cfrac{ p_\text{useful} \cdot p_\text{plausible} }{p_\text{useful} \cdot p_\text{plausible} + p_\text{lie} \cdot (1 - p_\text{plausible}) } & \text{assuming H helps} \\ \cfrac{ p_\text{useful}' \cdot p_\text{plausible} }{ p_\text{useful}' \cdot p_\text{plausible} + p_\text{lie}' \cdot (1 - p_\text{plausible}) } & \text{assuming H doesn’t help}. \end{cases} \end{align} \] In words, the \(p(\text{H } | \text{ says H})\), the probability that H is actually true given we read it in a historic source, as given in \eqref{eq:tp3} above corresponds only to the “H helps” case. Now, that \(p(\text{H } | \text{ says H})\) depends on whether H helps the author or not. The difference between the two cases is that we replaced two probabilities with primed versions,</p>
+<ul>
+<li>\(p_\text{useful}\) ⟹ \(p_\text{useful}'\) (note the prime, or apostrophe, to the upper-right of “p”), and</li>
+<li>\(p_\text{lie}\) ⟹ \(p_\text{lie}'\).</li>
+</ul>
+<p>Here are the formal definitions for these four probabilities:</p>
+<ul>
+<li>\(p_\text{useful} = p(\text{says H } | \text{ H, H helps})\)</li>
+<li>\(p_\text{useful}' = p(\text{says H } | \text{ H, H doesn’t help})\)</li>
+<li>\(p_\text{lie} = p(\text{says H } | \text{ not H, H helps})\)</li>
+<li>\(p_\text{lie}' = p(\text{says H } | \text{ not H, H doesn’t help})\)</li>
+</ul>
+<p>Although “H helps” and its complement (its opposite) “H doesn’t help” are to the right of the bar, meaning they are taken as given in the respective cases, I want to treat them as deterministic knowns. That is, for any H, I think we can say whether H helps the author or not. You could treat this as another random variable (like we do with “says H” and “H”), then express \(p(\text{H } | \text{ says H})\) using total probability, but I believe that won’t change the conclusion about the dissimilarity criterion.</p>
+<p>Separating \(p(\text{H } | \text{ says H})\) into two branches, with different sets of \(p_\text{useful}\)s and \(p_\text{lie}\)s, is nice because we can state two inequalities about the primed and unprimed version of these probabilities:</p>
+<ul>
+<li>\(p_\text{useful} ≥ p_\text{useful}'\), implying that, for an event H that actually happened, it’s more likely to be recorded if it helps the author than not; and</li>
+<li>\(p_\text{lie} ≥ p_\text{lie}'\), since a fabrication that’s helpful is more likely to be written down than a fabrication that’s not.</li>
+</ul>
+<p>In fact, if we make horrifically rough approximations, we could maybe say:</p>
+<ul>
+<li>\(p_\text{useful} ≈ 1\): if H is both true and helpful to the author, it’s highly likely they’ll record it; also,</li>
+<li>\(p_\text{lie}' ≈ 0\): if H isn’t true and it doesn’t help the author, it wouldn’t have been written.</li>
+</ul>
+<p><em>If</em> these grotesque approximations were legitimate, then observe how \eqref{eq:2branch} simplifies: \[ \begin{align} p(\text{H } | \text{ says H}) ≈ \begin{cases} \cfrac{ p_\text{plausible} }{p_\text{plausible} + p_\text{lie} \cdot (1 - p_\text{plausible})} ≤ 1 & \text{assuming H helps} \\ \hfil 1 \hfil & \text{assuming H doesn’t help}. \end{cases} \label{eq:2branch} \end{align} \] Hey! This is exactly the statement of the criterion of dissimilarity: our belief in H, assuming it helps the author, is <em>less than or equal to</em> when H doesn’t help the author. The two branches of this approximation are only <em>equal</em> when \(p_\text{lie} = 0\), which we can probably all agree is never the case—historic authors are likely to lie at least occasionally.</p>
+<p>But we don’t want to rely on such ghastly approximations. We can corroborate the dissimilarity criterion without them by algebraic massaging of both branches of \(p(\text{H } | \text{ says H})\), depending on whether H helps the author or not. We can do this by adapting the two reasonable inequalities mentioned above:</p>
+<ul>
+<li>\(p_\text{useful} ≥ p_\text{useful}'\) ⟹ \(\cfrac{p_\text{useful}}{p_\text{useful}'} = n_\text{useful} ≥ 1\), and</li>
+<li>\(p_\text{lie} ≥ p_\text{lie}'\) ⟹ \( \cfrac{p_\text{lie}}{p_\text{lie}'} = n_\text{lie} ≥ 1\).</li>
+</ul>
+<p>With these two variables, we can look at the ratio between the two branches of \eqref{eq:2branch}, because this ration will be less than 1, then the probability of believing a helpful H is <em>less than</em> an unhelpful H. I hope I get this algebra right: \[ \begin{align} \frac{ p(\text{H } | \text{ says H, H is helpful})}{ p(\text{H } | \text{ says H, H unhelpful}) } &= \frac{p_\text{useful}}{p_\text{useful}'} \cdot \frac{ p_\text{useful}' \cdot p_\text{plausible} + p_\text{lie}' \cdot (1 - p_\text{plausible}) }{ p_\text{useful} \cdot p_\text{plausible} + p_\text{lie} \cdot (1 - p_\text{plausible})} \\ &= n_\text{useful} \cdot \frac{\frac{p_\text{useful}}{n_\text{useful}} \cdot p_\text{plausible} + \frac{p_\text{lie}}{n_\text{lie}} \cdot (1 - p_\text{plausible}) }{ p_\text{useful} \cdot p_\text{plausible} + p_\text{lie} \cdot (1 - p_\text{plausible}) } \\ &= \frac{ a + b \cdot \left( \cfrac{n_\text{useful}}{n_\text{lie}} \right) }{ a + b } = n \end{align} \] In the last step, I replaced bigger expressions with simple variables, for aesthetic purposes—it helps us see what comes next:</p>
+<ul>
+<li>\(a = p_\text{useful} \cdot p_\text{plausible}\), and</li>
+<li>\(b = p_\text{lie} \cdot (1 - p_\text{plausible})\), and</li>
+<li>the ratio of the two branches’ probabilities is called \(n\).</li>
+</ul>
+<p>Then it’s algebraically apparent that,</p>
+<ul>
+<li>first,
+<ul>
+<li>if \(n_\text{useful} &lt; n_\text{lie}\),</li>
+<li>then \(n &lt; 1\),</li>
+<li>so \(p(\text{H } | \text{ says H, H is helpful}) &lt; p(\text{H } | \text{ says H, H unhelpful}),\)</li>
+<li>which is equivalent to the dissimilarity criterion. 😄!</li>
+</ul></li>
+<li>But,
+<ul>
+<li>if \(n_\text{useful} ≥ n_\text{lie}\),</li>
+<li>then the dissimilarity criterion is contradicted.</li>
+</ul></li>
+</ul>
+<p>We’ve just obtained a very simple requirement for the dissimilarity criterion to hold: \(n_\text{useful} &lt; n_\text{lie}\). What does this requirement really mean though? And when is it met?</p>
+<p>Expand this requirement algebraically, and then I promise I’ll explain it in prose. \[ \begin{align} \Big( n_\text{useful} &&lt; n_\text{lie} \Big) \\ \Bigg( \frac{ p_\text{useful} }{p_\text{useful}' } &&lt; \frac{ p_\text{lie} }{ p_\text{lie}' }\Bigg) \\ \frac{ p(\text{says H } | \text{ H, H is helpful}) }{p(\text{says H } | \text{ H, H unhelpful}) } &&lt; \frac{p(\text{says H } | \text{ not H, H is helpful}) }{ p(\text{says H } | \text{ not H, H unhelpful}) }. \end{align} \] Now in words: the criterion of dissimilarity is applicable when</p>
+<ul>
+<li>a <em>helpful</em> true event is closer in probability to an <em>unhelpful</em> true event than</li>
+<li>a <em>helpful</em> fabrication to an <em>unhelpful</em> fabrication.</li>
+</ul>
+<p>(Conversely… the criterion of dissimilarity does <em>not</em> apply if this condition isn’t met.)</p>
+<p>Now by way of example: imagine for a given H we’ve</p>
+<ul>
+<li>selected numbers for
+<ul>
+<li>\(p_\text{useful} = p(\text{says H } | \text{ H, H is helpful})\) and</li>
+<li>\(p_\text{lie} = p(\text{says H } | \text{ not H, H is helpful})\),</li>
+</ul></li>
+<li>and we want to pick reasonable numbers for
+<ul>
+<li>\(p_\text{useful}' = p(\text{says H } | \text{ H, H unhelpful})\) and</li>
+<li>\(p_\text{lie}' = p(\text{says H } | \text{ not H, H unhelpful})\).</li>
+</ul></li>
+</ul>
+<p>The probability of an unhelpful truth getting recorded, \(p_{useful}'\), will be smaller than a helpful truth’s probability of getting recorded \(p_{useful}\). But how much smaller? Perhaps we can say it won’t be very much smaller, say \(p_{useful} / p_{useful}' = 10\), because after all, writers through the ages are prone to recording truths because they find them interesting and not because they further their agenda—“unhelpful” in our model. (Titus Livy remarked on this, at the beginning of the Christian Era, when recounting a then-four-hundred-year-old combat between Titus Manlius Torquatus and a Gaulish giant who “in his stupid glee thrust his tongue out in derision—for the ancients have thought even this worth mentioning”. This was of course the fight in which the young tribune got that agnomen “Torquatus”. From <a href="http://www.perseus.tufts.edu/hopper/text?doc=Liv.%207.10.5">The History of Rome</a>, translated by Benjamin Oliver Foster, book 7, chapter 10, though Torquatus’ story begins at chapter 4 of that book.)</p>
+<p>Similarly, the probability of an unhelpful <em>fabrication</em> getting recorded, \(p_{lie}'\), is less than the probability of a helpful fabrication, \(p_{lie}\)—again, “helpful” here means “helps the author further their agenda” and is a quantification of the legitimacy of an ad hominem attack. But perhaps, unlike the case of \(p_{useful}'\) above, we can say it is <em>very</em> unlikely that an unhelpful fabrication is recorded, compared to the probability of a helpful one, e.g., \(p_{lie} / p_{lie}' = 100\)?, because why would a historical writer make something up if it didn’t further their cause, unless they were an inveterate Marco Polo (or rather, Rustichello of Pisa)?</p>
+<p>So. <strong>If</strong> this relationship holds, where</p>
+<ul>
+<li>a <em>helpful</em> true event is closer in probability to an <em>unhelpful</em> true event than</li>
+<li>a <em>helpful</em> fabrication is to an <em>unhelpful</em> one,</li>
+</ul>
+<p>then the criterion of dissimilarity is valid, and encourages us to discount events that help an author further their agenda.</p>
+<h2 id="epilogue">Epilogue</h2>
+<p>Conditional probability is <em>really</em> tricky. By law, professors are required to lecture on (or assign) the Monty Hall problem to their probability classes—the same problem that Paul Erdős, the prodigious traveling mathematician, who died twenty years ago on this day <a href="https://people.math.osu.edu/nevai.1/AT/ERDOS/erdos_washington_post.html">[osu.edu]</a>, got wrong but insisted otherwise, until they showed him proof by Monte Carlo <a href="http://www.mwsug.org/proceedings/2010/stats/MWSUG-2010-87.pdf">[mwsug.org]</a>, although in his defense, most mathematicians who haven’t heard of the puzzler get it wrong too <a href="https://www.wired.com/2014/11/monty-hall-erdos-limited-minds/">[wired.com]</a>.</p>
+<blockquote>
+For fun, an implementation of Monty Hall’s game is included in the source of this webpage: if a thousand players use the “switch” strategy, <span id="monty-hall-switchers">66.1</span>% of them win the car 🚗. If a thousand players use the “stay” strategy, only <span id="monty-hall-stayers">34.1</span>% win the car 🚗.
+<button onclick="monteCarlo();">
+Click to recalculate.
+</button>
+</blockquote>
+<p>I say all this because, for me, the criterion of dissimilarity is an interesting idea from “the wild” to which I could try to apply some of my book learning. Book learning is usually not readily applied to problems from the wild, and in my case, it’s terrifically hard. Add the hyperfine subtleties of probability and I could very well have made mistakes above. If you’re a historian, please don’t use this for your Real Work, at least until you talk to someone you trust.</p>
+<p>(Banner credit: Leonardo da Vinci’s <em>St John in the Wilderness</em>, circa 1510–1515, today in the Louvre, Paris, France. Reproduction via <a href="http://www.artbible.info/art/large/704.html">Art and the Bible</a>.)</p>
+<script src="dissim.compat.js" async></script>
+<p>
+<small>Previous: <a href="/post/texshade/">Texture-shaded globes</a><br>Next: <a href="/post/kanjibreak/">Announcing: KanjiBreak</a></small>
+</p>

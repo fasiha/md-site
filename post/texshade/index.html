@@ -1,0 +1,328 @@
+<head><meta charset="utf-8" />
+<title>Texture-shaded globes</title>
+<meta name="description" content="Texture-shading: you’ve never seen terrain like this before!" />
+<meta name="twitter:card" value="summary">
+<meta property="og:title" content="Texture-shaded globes" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="post/texshade/index.html" />
+<meta property="og:image" content="arches.jpg" />
+<meta property="og:description" content="Texture-shading: you’ve never seen terrain like this before!" />
+<style>@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+  .parallax {
+    background-attachment: scroll;
+  }
+}
+
+pre,
+code {
+  font-family: Menlo, Monaco, Consolas, Inconsolata, "Andale Mono", "Fira Code", "Lucida Console", "Lucida Sans Typewriter", "Courier New", monospace;
+}
+
+pre {
+  padding: .5rem;
+  line-height: 1.25;
+  overflow-x: scroll;
+}
+
+a,
+a:visited {
+  color: #3498db;
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: #2980b9;
+}
+
+.modest-no-decoration {
+  text-decoration: none;
+}
+
+html {
+  font-size: 12px;
+}
+
+@media screen and (min-width: 32rem) and (max-width: 48rem) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 48rem) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  line-height: 1.85;
+}
+
+p,
+.modest-p {
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
+}
+
+h1,
+.modest-h1,
+h2,
+.modest-h2,
+h3,
+.modest-h3,
+h4,
+.modest-h4 {
+  margin: 1.414rem 0 .5rem;
+  font-weight: inherit;
+  line-height: 1.42;
+}
+
+h1,
+.modest-h1 {
+  margin-top: 0;
+  font-size: 3.998rem;
+}
+
+h2,
+.modest-h2 {
+  font-size: 2.827rem;
+}
+
+h3,
+.modest-h3 {
+  font-size: 1.999rem;
+}
+
+h4,
+.modest-h4 {
+  font-size: 1.414rem;
+}
+
+h5,
+.modest-h5 {
+  font-size: 1.121rem;
+}
+
+h6,
+.modest-h6 {
+  font-size: .88rem;
+}
+
+small,
+.modest-small {
+  font-size: .707em;
+}
+
+/* https://github.com/mrmrs/fluidity */
+
+img,
+canvas,
+iframe,
+video,
+svg,
+select,
+textarea {
+  max-width: 100%;
+}
+
+html {
+  font-size: 18px;
+  max-width: 100%;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  color: #444;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  margin: 0 auto;
+  max-width: 48rem;
+  line-height: 1.45;
+  padding: 0 .25rem .25rem;
+}
+
+h1,
+h2,
+h3 {
+  border-bottom: 2px solid #fafafa;
+  margin-bottom: 1.15rem;
+  padding-bottom: .5rem;
+  text-align: center;
+}
+
+blockquote {
+  border-left: 8px solid #fafafa;
+  padding: 1rem;
+}
+
+pre,
+code {
+  background-color: #fafafa;
+}
+
+figure {
+  position: relative;
+  text-align: center;
+}
+figcaption {
+  color: #999;
+  font-size: 0.9em;
+  margin-top: 0.5em;
+}
+
+/* https://css-tricks.com/full-width-containers-limited-width-parents/ */
+.full-width {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+.no-top {
+  margin-top: 0px;
+  padding-top:0px;
+}
+</style>
+
+</head>
+<figure class="full-width no-top"><img src="arches.jpg"></figure><h1>Texture-shaded globes</h1><p><em>By <a href="/#contact">Ahmed Fasih</a>. Updated on Mon, 14 Dec 2015 04:08:00 GMT, tagged with ‘tech’.</em></p><h2 id="lets-start-with-six-examples.">Let’s start with six examples.</h2>
+<h3 id="japan-566-km">Japan: 566 km</h3>
+<figure>
+<a href="japan-black-marble.jpg"><img src="japan-black-marble.jpg" alt="Japan: Mountains and Light. 日本、山と光" /></a>
+<figcaption>
+Japan: Mountains and Light. 日本、山と光
+</figcaption>
+</figure>
+<p>This shows Honshu, the big island of Japan, as well as Shikoku and the Korean and Chinese coastlines, from a vantage point floating east of the Asian continent, 566 kilometers above the surface. (The International Space Station hovers around 405 km.)</p>
+<p>The huge blob of yellow light in the lower-middle is the Tokyo megalopolis. If you follow the nearer coastline left (southwards), you’ll hit the next sprawling blobs of light, the Nagoya metropolis, then the Osaka–Kobe metropolis, on either side of the Nara peninsula. The yellow blobs are what the Suomi NPP satellite saw at night, i.e., the <a href="https://www.nasa.gov/topics/earth/earthmonth/earthmonth_2013_5.html">NASA Black Marble</a> image.</p>
+<p>Superimposed on that image is terrain, in monochrome. The gray and white veins are the backbones of the Japanese mountains. If I pointed it out to you, you’d likely recognize Mount Fuji, a circle of white terrain south of Tokyo’s sea of yellow. You may have heard that Japan is mountainous, and its people live mainly in the coastal plains and valleys. Now you know.</p>
+<h3 id="dayton-ohio-usa-15-km">Dayton, Ohio, USA: 15 km</h3>
+<figure>
+<a href="daycin.jpg"><img src="daycin.jpg" alt="The US Air Force Museum, Dayton, Ohio, USA" /></a>
+<figcaption>
+The US Air Force Museum, Dayton, Ohio, USA
+</figcaption>
+</figure>
+<p>Here’s the city where I live, from a view fifteen kilometers up, nearly the service ceiling of a Cessna Citation business jet. If you know what to look for, you can see a triangle of runways next to the National Museum of the US Air Force in the very center of the image. It’s just below (south) of the Mad River that winds its way southwest from the top of the image, to join Twin Creek and Wolf Creek to create the Great Miami River that flows south out of the bottom-left.</p>
+<p>The Museum comfortably sits in the basin of this <a href="https://en.wikipedia.org/wiki/Five_Rivers_MetroParks">Five Rivers Park</a>, nestled between the aptly-named Huber Heights to the north, the unsuspected hills of Beavercreek to the southeast, and a hilly spur of Dayton proper to the west (which includes Woodland Cemetery and Arboretum, where the Wright brothers are buried).</p>
+<h3 id="the-hudson-835-km">The Hudson: 835 km</h3>
+<figure>
+<a href="hudson.jpg"><img src="hudson.jpg" alt="835 km. The Hudson River Valley, USA, flanked by Catskills, Adirondacks, and the Green Mountains" /></a>
+<figcaption>
+835 km. The Hudson River Valley, USA, flanked by Catskills, Adirondacks, and the Green Mountains
+</figcaption>
+</figure>
+<p>The third image is from a vantage 835 kilometers above New York. The perhaps subtle formation running up through the middle of this image is the Hudson River Valley, which flows south and empties out into the ocean above Manhattan—which you can just make out at the very bottom. To the upper-left of the Hudson’s valley are the Adirondacks, while to their left is the larger spread of the Catskills. To the valley’s right are the large Green Mountains, and further east, the White Mountains, both centering around the whitest veins, the ridges of the mountain chains. Due west of Manhattan you can probably clearly identify what they mean by <a href="https://en.wikipedia.org/wiki/Ridge-and-Valley_Appalachians">Ridge-and-Valley region</a> of the Appalachians.</p>
+<p>You might enjoy identifying all the components in <a href="https://commons.wikimedia.org/wiki/File:NortheastAppalachiansMap.jpg">this schematic</a> on this higher-resolution view of the terrain. Also contrast the prominent drainage pattern of the Catskills—where many rivers end in visible lakes—with the more stony demeanor of the Adirondacks.</p>
+<h3 id="sichuan-745-km">Sichuan: 745 km</h3>
+<figure>
+<a href="sichuan.jpg"><img src="sichuan.jpg" alt="Sichuan Basin, China" /></a>
+<figcaption>
+Sichuan Basin, China
+</figcaption>
+</figure>
+<p>Let’s return to the Far East to look at the Sichuan Basin from a vantage point 745 kilometers high.</p>
+<p>No color here. No basemap. Just monochrome terrain. The frantic fractal mountains to the left (west) are the start of the Tibetan massif. Lower mountains ring the other directions as well. In the middle though we have a patch of peaceful-seeming flatland.</p>
+<p>Sichuan is written 四川 in the original. Four 四 rivers 川. In that flatland, you can see the sinuous line of some of those rivers. The thin lines aren’t the rivers themselves—the biggest of lines are a few kilometers wide. What you see as rivers are actually the river valleys carved out by flip-flopping rivers over the millennia.</p>
+<h3 id="the-sinai-945-km">The Sinai: 945 km</h3>
+<figure>
+<a href="sinai.jpg"><img src="sinai.jpg" alt="The Nile, the Sinai, the Transjordan" /></a>
+<figcaption>
+The Nile, the Sinai, the Transjordan
+</figcaption>
+</figure>
+<p>Our fifth example puts the terrain back on top of the NASA Black Marble, of the earth at night, but with colors saturated to bleed through the terrain. The fox face in the middle is the Sinai Peninsula. To its left (west) you see the Nile, both it’s broad valley flanked by terrain and the orange of its nearly ninety millions. The triangle of the Nile Delta has no visible terrain—it’s so flat.</p>
+<p>A scar runs along the fox-faced Sinai’s right cheek. In the middle of it, very nearly black, is the Dead Sea, the lowest point on earth. To the left of this cleft are the teeming cities of Israel and occupied Palestine, and to its right those of Jordan. At the bottom-right, you can see the Hejazi mountains, separating the coastal region of Tihamah from the interior of Najd.</p>
+<p>The whole area—cradles of civilization, 4’500 year old pyramids (as ancient to the Ancient Romans as the Romans are to us), the Late Bronze Age collapse, the Exodus, down to the Intifadas and Arab Spring and modern upheavals—seeing the stage of this drama in such detail is nearly breathtaking.</p>
+<p>There’s this <a href="https://commons.wikimedia.org/wiki/File:Nile_River_Delta_at_Night.JPG">other view</a> of this scene that you might enjoy.</p>
+<h3 id="above-central-ukraine-looking-west-2155-km">Above central Ukraine, looking west: 2155 km</h3>
+<figure>
+<a href="europe-from-east.jpg"><img src="europe-from-east.jpg" alt="Above Ukraine, looking west" /></a>
+<figcaption>
+Above Ukraine, looking west
+</figcaption>
+</figure>
+<p>Five times higher than the International Space Station comes this view, imitating the classic 1944 infographic painting, <a href="http://www.davidrumsey.com/luna/servlet/detail/RUMSEY~8~1~266329~5504885:Europe-From-The-East#">“Europe From the East” by Richard Edes Harrison</a>, stunning as a huge coffee-table-sized print.</p>
+<p>In the image above, the earth’s colors are hinted by the underlying <a href="https://www.mapbox.com/blog/cloudless-atlas-with-landsat/">MapBox Cloudless Atlas</a> basemap, above which sits the terrain in monochrome. It’s this terrain layer rendering those Alps white—the satellite-derived basemap has barely any snow.</p>
+<p>Just south (left) of those Alps is a shadowy flatland: that’s the Po River valley, the productive plain of the Emilia-Romagna region containing busy Milan, lovely Bologna, and stunning Venice. The near-black is a function of the suddenness with the Alps crash into that plain, a suddenness which no doubt was appreciated by Hannibal.</p>
+<p>North of the Alps, there’re no drops as sharp as this so no deep shadows, but something of note—that huge channel running north from the Alps up into Germany, that’s the Rhine River in there. The river didn’t carve the valley, which is actually a <a href="https://en.wikipedia.org/w/index.php?title=Rhine&amp;oldid=781522255#Alpine_orogeny">continental rift phenomenon</a>. To the west of the Rhine you can see the sinuous winding of the Paris-splitting Seine pouring into the Atlantic north of the Cotentin Peninsula.</p>
+<p>On the other side of the Alps begins the arc of the Carpathian Mountains curving east from Kraków in Poland and southeast into Romania, where they turn sharply right to meet the Transylvanian Mountains that then march westwards to the Romanian–Serbian border (the famed Iron Gates) before turning south and crashing into the Balkan Mountain range that have been busily splitting Bulgaria from the Black Sea coast.</p>
+<p>And between that bulge formed by the Carpathian and Balkan ranges is nestled the river valley of the blue Danube, emptying out into the Black Sea after starting on the eastern flank of the Rhine way out near the German–Swiss–French border and stringing together the exquisite pearls of Vienna, Bratislava, Budapest, and Belgrade (the capital jewels of Austria, Slovakia, Hungary, and Serbia).</p>
+<p>Two million meters tall, this view has a lot more that can be said about it, but I will stop here.</p>
+<h2 id="fasten-your-seatbelts">Fasten your seatbelts</h2>
+<p>All these images offer some pretty good resolution and I’m deeply sorry if you visited this page on a slow internet connection. Viewing them at full-zoom will likely make every winding river valley or every cracked mountain spine bigger by a factor of two, maybe four. Scroll around, see what you can see.</p>
+<p>Then. If you’re at a recent computer with a WebGL-enabled browser, click of these links to go to the web app that generated all four of these images.</p>
+<ul>
+<li><a href="http://maps.aldebrn.me/Apps/#%7B%22version%22%3A0%2C%22baseLayerPicked%22%3A%7B%22name%22%3A%22The%20Black%20Marble%22%2C%22iconUrl%22%3A%22http%3A%2F%2Fmaps.aldebrn.me%2FBuild%2FCesium%2FWidgets%2FImages%2FImageryProviders%2FblackMarble.png%22%7D%2C%22baseTerrainPicked%22%3A%7B%22name%22%3A%22WGS84%20Ellipsoid%22%7D%2C%22layers%22%3A%5B%7B%22url%22%3A%22%2F%2Fcesiumjs.org%2Fblackmarble%22%2C%22isBaseLayer%22%3Atrue%2C%22alpha%22%3A1%2C%22brightness%22%3A1%2C%22contrast%22%3A1%2C%22hue%22%3A0%2C%22saturation%22%3A1%2C%22gamma%22%3A0.48%7D%2C%7B%22url%22%3A%22http%3A%2F%2Fmaps.aldebrn.me%2Fworld-tex-cgiar-90m%22%2C%22isBaseLayer%22%3Afalse%2C%22alpha%22%3A0.52%2C%22brightness%22%3A1.32%2C%22contrast%22%3A1.4%2C%22hue%22%3A0%2C%22saturation%22%3A1%2C%22gamma%22%3A1%7D%5D%2C%22terrainExaggeration%22%3A1%2C%22destination%22%3A%7B%22x%22%3A-4555669.674111755%2C%22y%22%3A3702876.47327235%2C%22z%22%3A3697615.9732322954%7D%2C%22orientation%22%3A%7B%22heading%22%3A5.681369036822533%2C%22pitch%22%3A-0.8218479123823927%2C%22roll%22%3A0.027079069039927184%7D%7D">Japan</a></li>
+<li><a href="https://fasiha.github.io/daycin/Apps/#%7B%22version%22%3A0%2C%22baseLayerPicked%22%3A%7B%22name%22%3A%22Bing%20Maps%20Aerial%22%2C%22iconUrl%22%3A%22https%3A%2F%2Ffasiha.github.io%2Fdaycin%2FBuild%2FCesium%2FWidgets%2FImages%2FImageryProviders%2FbingAerial.png%22%7D%2C%22baseTerrainPicked%22%3A%7B%22name%22%3A%22WGS84%20Ellipsoid%22%7D%2C%22layers%22%3A%5B%7B%22url%22%3A%22%2F%2Fdev.virtualearth.net%22%2C%22isBaseLayer%22%3Atrue%2C%22alpha%22%3A1%2C%22brightness%22%3A1%2C%22contrast%22%3A1.22%2C%22hue%22%3A0%2C%22saturation%22%3A1%2C%22gamma%22%3A1.08%7D%2C%7B%22url%22%3A%22..%2Ftiles%22%2C%22isBaseLayer%22%3Afalse%2C%22alpha%22%3A0.9%2C%22brightness%22%3A1%2C%22contrast%22%3A1.4%2C%22hue%22%3A0%2C%22saturation%22%3A1%2C%22gamma%22%3A0.68%7D%5D%2C%22terrainExaggeration%22%3A1%2C%22destination%22%3A%7B%22x%22%3A504706.8355537353%2C%22y%22%3A-4893815.209792661%2C%22z%22%3A4069458.683224584%7D%2C%22orientation%22%3A%7B%22heading%22%3A0.0032050530316229953%2C%22pitch%22%3A-1.5707141038036494%2C%22roll%22%3A0%7D%7D">Dayton</a></li>
+<li><a href="http://maps.aldebrn.me/Apps/#%7B%22version%22%3A0%2C%22baseLayerPicked%22%3A%7B%22name%22%3A%22Mapbox%20Streets%22%2C%22iconUrl%22%3A%22http%3A%2F%2Fmaps.aldebrn.me%2FBuild%2FCesium%2FWidgets%2FImages%2FImageryProviders%2FmapboxTerrain.png%22%7D%2C%22baseTerrainPicked%22%3A%7B%22name%22%3A%22WGS84%20Ellipsoid%22%7D%2C%22layers%22%3A%5B%7B%22url%22%3A%22%2F%2Fapi.mapbox.com%2Fv4%2F%22%2C%22isBaseLayer%22%3Atrue%2C%22alpha%22%3A1%2C%22brightness%22%3A1%2C%22contrast%22%3A1%2C%22hue%22%3A0%2C%22saturation%22%3A1%2C%22gamma%22%3A1%7D%2C%7B%22url%22%3A%22http%3A%2F%2Fmaps.aldebrn.me%2Fworld-tex-cgiar-90m%22%2C%22isBaseLayer%22%3Afalse%2C%22alpha%22%3A0.86%2C%22brightness%22%3A1%2C%22contrast%22%3A2.5%2C%22hue%22%3A0%2C%22saturation%22%3A1%2C%22gamma%22%3A1.84%7D%5D%2C%22terrainExaggeration%22%3A1%2C%22destination%22%3A%7B%22x%22%3A1467237.0149951847%2C%22y%22%3A-5040591.413295751%2C%22z%22%3A4932743.9292378975%7D%2C%22orientation%22%3A%7B%22heading%22%3A0.06478440361275162%2C%22pitch%22%3A-1.569780019850889%2C%22roll%22%3A0%7D%7D">The Hudson</a></li>
+<li><a href="http://maps.aldebrn.me/Apps/#%7B%22version%22%3A0%2C%22baseLayerPicked%22%3A%7B%22name%22%3A%22The%20Black%20Marble%22%2C%22iconUrl%22%3A%22http%3A%2F%2Fmaps.aldebrn.me%2FBuild%2FCesium%2FWidgets%2FImages%2FImageryProviders%2FblackMarble.png%22%7D%2C%22baseTerrainPicked%22%3A%7B%22name%22%3A%22WGS84%20Ellipsoid%22%7D%2C%22layers%22%3A%5B%7B%22url%22%3A%22%2F%2Fcesiumjs.org%2Fblackmarble%22%2C%22isBaseLayer%22%3Atrue%2C%22alpha%22%3A1%2C%22brightness%22%3A1%2C%22contrast%22%3A1%2C%22hue%22%3A0%2C%22saturation%22%3A1%2C%22gamma%22%3A1%7D%2C%7B%22url%22%3A%22http%3A%2F%2Fmaps.aldebrn.me%2Fworld-tex-cgiar-90m%22%2C%22isBaseLayer%22%3Afalse%2C%22alpha%22%3A1%2C%22brightness%22%3A1.26%2C%22contrast%22%3A3%2C%22hue%22%3A0%2C%22saturation%22%3A1%2C%22gamma%22%3A1%7D%5D%2C%22terrainExaggeration%22%3A1%2C%22destination%22%3A%7B%22x%22%3A-1680812.5781039044%2C%22y%22%3A5928345.92553644%2C%22z%22%3A3564399.711321817%7D%2C%22orientation%22%3A%7B%22heading%22%3A6.274816124366115%2C%22pitch%22%3A-1.570034204520696%2C%22roll%22%3A0%7D%7D">Sichuan</a></li>
+<li><a href="http://maps.aldebrn.me/Apps/#%7B%22version%22%3A0%2C%22baseLayerPicked%22%3A%7B%22name%22%3A%22The%20Black%20Marble%22%2C%22iconUrl%22%3A%22http%3A%2F%2Fmaps.aldebrn.me%2FBuild%2FCesium%2FWidgets%2FImages%2FImageryProviders%2FblackMarble.png%22%7D%2C%22baseTerrainPicked%22%3A%7B%22name%22%3A%22WGS84%20Ellipsoid%22%7D%2C%22layers%22%3A%5B%7B%22url%22%3A%22%2F%2Fcesiumjs.org%2Fblackmarble%22%2C%22isBaseLayer%22%3Atrue%2C%22alpha%22%3A1%2C%22brightness%22%3A1%2C%22contrast%22%3A1%2C%22hue%22%3A0%2C%22saturation%22%3A3%2C%22gamma%22%3A1%7D%2C%7B%22url%22%3A%22http%3A%2F%2Fmaps.aldebrn.me%2Fworld-tex-cgiar-90m%22%2C%22isBaseLayer%22%3Afalse%2C%22alpha%22%3A0.84%2C%22brightness%22%3A1.22%2C%22contrast%22%3A3%2C%22hue%22%3A0%2C%22saturation%22%3A1%2C%22gamma%22%3A1%7D%5D%2C%22terrainExaggeration%22%3A1%2C%22destination%22%3A%7B%22x%22%3A5290854.567243439%2C%22y%22%3A3560796.5956659717%2C%22z%22%3A3588048.238531111%7D%2C%22orientation%22%3A%7B%22heading%22%3A6.139467117973812%2C%22pitch%22%3A-1.5563300568612175%2C%22roll%22%3A0%7D%7D">Sinai</a></li>
+<li><a href="http://maps.aldebrn.me/Apps/#%7B%22version%22%3A0%2C%22baseLayerPicked%22%3A%7B%22name%22%3A%22Mapbox%20Satellite%22%2C%22iconUrl%22%3A%22http%3A%2F%2Fmaps.aldebrn.me%2FBuild%2FCesium%2FWidgets%2FImages%2FImageryProviders%2FmapboxSatellite.png%22%7D%2C%22baseTerrainPicked%22%3A%7B%22name%22%3A%22WGS84%20Ellipsoid%22%7D%2C%22layers%22%3A%5B%7B%22url%22%3A%22%2F%2Fapi.mapbox.com%2Fv4%2F%22%2C%22isBaseLayer%22%3Atrue%2C%22alpha%22%3A1%2C%22brightness%22%3A1%2C%22contrast%22%3A1%2C%22hue%22%3A0%2C%22saturation%22%3A3%2C%22gamma%22%3A1%7D%2C%7B%22url%22%3A%22http%3A%2F%2Fmaps.aldebrn.me%2Fworld-tex-cgiar-90m%22%2C%22isBaseLayer%22%3Afalse%2C%22alpha%22%3A0.86%2C%22brightness%22%3A1.3%2C%22contrast%22%3A5%2C%22hue%22%3A0%2C%22saturation%22%3A1%2C%22gamma%22%3A1%7D%5D%2C%22terrainExaggeration%22%3A1%2C%22destination%22%3A%7B%22x%22%3A4596057.84922899%2C%22y%22%3A2996920.8694578307%2C%22z%22%3A6519928.159490867%7D%2C%22orientation%22%3A%7B%22heading%22%3A4.518257183901266%2C%22pitch%22%3A-1.0325489903556369%2C%22roll%22%3A6.281328392869174%7D%7D">Europe</a></li>
+</ul>
+<p>Play with the controls. When you’ve had enough, come back and we’ll explain below.</p>
+<h2 id="texture-shading">Texture-shading</h2>
+<p>Upcoming.</p>
+<p>
+<small>Next: <a href="/post/dissimilarity/">Conditional probability and the criterion of dissimilarity</a></small>
+</p>
