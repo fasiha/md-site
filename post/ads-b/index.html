@@ -1,0 +1,556 @@
+<!doctype html>
+<head><meta charset="utf-8" />
+<title>Track planes with a USB dongle</title>
+<meta name="description" content="Instructions for getting real-time, local commercial and general aviation data with a RTL-SDR USB dongle and open-source software." />
+<meta name="twitter:card" value="summary">
+<meta property="og:title" content="Track planes with a USB dongle" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="post/ads-b/index.html" />
+<meta property="og:image" content="747.jpg" />
+<meta property="og:description" content="Instructions for getting real-time, local commercial and general aviation data with a RTL-SDR USB dongle and open-source software." />
+<style>@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+  .parallax {
+    background-attachment: scroll;
+  }
+}
+
+pre,
+code {
+  font-family: Menlo, Monaco, Consolas, Inconsolata, "Andale Mono", "Fira Code", "Lucida Console", "Lucida Sans Typewriter", "Courier New", monospace;
+}
+
+pre {
+  padding: .5rem;
+  line-height: 1.25;
+  overflow-x: scroll;
+}
+
+a,
+a:visited {
+  color: #3498db;
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: #2980b9;
+}
+
+.modest-no-decoration {
+  text-decoration: none;
+}
+
+html {
+  font-size: 12px;
+}
+
+@media screen and (min-width: 32rem) and (max-width: 48rem) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 48rem) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  line-height: 1.85;
+}
+
+p,
+.modest-p {
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
+}
+
+h1,
+.modest-h1,
+h2,
+.modest-h2,
+h3,
+.modest-h3,
+h4,
+.modest-h4 {
+  margin: 1.414rem 0 .5rem;
+  font-weight: inherit;
+  line-height: 1.42;
+}
+
+h1,
+.modest-h1 {
+  margin-top: 0;
+  font-size: 3.998rem;
+}
+
+h2,
+.modest-h2 {
+  font-size: 2.827rem;
+}
+
+h3,
+.modest-h3 {
+  font-size: 1.999rem;
+}
+
+h4,
+.modest-h4 {
+  font-size: 1.414rem;
+}
+
+h5,
+.modest-h5 {
+  font-size: 1.121rem;
+}
+
+h6,
+.modest-h6 {
+  font-size: .88rem;
+}
+
+small,
+.modest-small {
+  font-size: .707em;
+}
+
+/* https://github.com/mrmrs/fluidity */
+
+img,
+canvas,
+iframe,
+video,
+svg,
+select,
+textarea {
+  max-width: 100%;
+}
+
+html {
+  font-size: 18px;
+  max-width: 100%;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  color: #444;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  margin: 0 auto;
+  max-width: 48rem;
+  line-height: 1.45;
+  padding: 0 .25rem .25rem;
+}
+
+h1,
+h2,
+h3 {
+  border-bottom: 2px solid #fafafa;
+  margin-bottom: 1.15rem;
+  padding-bottom: .5rem;
+  text-align: center;
+}
+
+blockquote {
+  border-left: 8px solid #fafafa;
+  padding: 1rem;
+}
+
+pre,
+code {
+  background-color: #fafafa;
+}
+
+figure {
+  position: relative;
+  text-align: center;
+}
+figcaption {
+  color: #999;
+  font-size: 0.9em;
+  margin-top: 0.5em;
+}
+
+/* https://css-tricks.com/full-width-containers-limited-width-parents/ */
+.full-width {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+.no-top {
+  margin-top: 0px;
+  padding-top:0px;
+}
+</style>
+<style>/* Tomorrow Night Eighties Theme */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #999999;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+  color: #f2777a;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+  color: #f99157;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+  color: #ffcc66;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #99cc99;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+  color: #6699cc;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #cc99cc;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  background: #2d2d2d;
+  color: #cccccc;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+
+</head>
+<figure class="full-width no-top"><img src="747.jpg"></figure><h1>Track planes with a USB dongle</h1><p><em>By <a href="/md-site#contact">Ahmed Fasih</a>. Updated on Wed, 31 Aug 2016 18:53:17 GMT, tagged with ‘tech’.</em></p><p><em>(N.B. This document also lives at <a href="https://gist.github.com/fasiha/c123a9c6b6c78df7597bb45e0fed808f" class="uri">https://gist.github.com/fasiha/c123a9c6b6c78df7597bb45e0fed808f</a>.)</em></p>
+<h2 id="introduction">Introduction</h2>
+<p>I’m not very familiar with the aviation jargon (see <a href="https://www.faa.gov/nextgen/programs/adsb/faq/">FAA’s ADS-B FAQ</a>), but ADS-B is a next-gen system where aircraft are equipped with transponders that periodically broadcast their own positions and receive the reports from both other aircraft (direct air-to-air) as well as air-traffic control (ATC) ground transmitters.</p>
+<p>There are two separate ADS-B radio bands: the <em>commercial aviation</em> (CA) is at 1090 MHz while the <em>general aviation</em> (GA) is at 978 MHz. If I can be permitted a gross generalization—the former corresponds to big commercial jets and the latter to small private aircraft.</p>
+<p>Because ADS-B is designed to democratize airspace situational awareness (in contrast to the older setup, like from films, where a central air-traffic controller is coordinating all these aircraft that can’t see each other), we can buy cheap RF receivers to pick up and decode the messages being broadcast by aircraft and ground towers to get our own picture of the local airspace. This rabbit hole actually goes quite deep: FlightAware.com has built a business on crowdsourced ADS-B receivers. They will give you a networked ADS-B kit called <a href="https://flightaware.com/adsb/flightfeeder/">FlightFeeder</a>, for free, if you live in an area of sparse coverage.</p>
+<p>Here’s one way to receive, log, and real-time visualize the traffic on either of these ADS-B bands using a USB radio receiver and some open-source software on a Mac.</p>
+<h2 id="hardware-base-software-setup">Hardware &amp; base software setup</h2>
+<p>Buy RTL-SDR. <a href="https://www.amazon.com/dp/B011HVUEME">$25 kit on Amazon</a>.</p>
+<p>Optional: buy antennas. <a href="https://www.amazon.com/gp/product/B01EJUM83S">$20 Stratux DMURRAY14 kit</a>.</p>
+<p>Install <a href="http://brewformulas.org/Librtlsdr"><code>librtlsdr</code></a>.</p>
+<pre class="nohighlight"><code>$ brew install pkg-config cmake librtlsdr</code></pre>
+<h2 id="dump1090"><a href="https://github.com/mutability/dump1090">dump1090</a></h2>
+<h3 id="setup">Setup</h3>
+<p>Clone <a href="https://github.com/mutability/dump1090">@mutability’s fork of dump1090</a> to collect and visualize <em>commercial</em> aviation (CA), which operates in the 1090 MHz band. (You’ll want this even if you’re only after <em>general</em> aviation (GA), which is on the 978 MHz band—our dump978 setup will use dump1090 for visualization.)</p>
+<pre class="nohighlight"><code>$ git clone https://github.com/mutability/dump1090.git
+$ cd dump1090
+$ make -j4 # omit if you will only do dump978/GA</code></pre>
+<h3 id="start-external-webserver">Start external webserver</h3>
+<p>If you’ve ever used the original dump1090 by @antirez: @mutability’s fork of dump1090 is architecturally different than the original. This fork writes a JSON file which has to be served by some external webserver.</p>
+<p>First create a directory to store the parsed results in JSON:</p>
+<pre class="nohighlight"><code>$ mkdir public_html/data</code></pre>
+<p>Then start a webserver that hosts the <code>public_html</code> directory. You have many choices but here’s a really simple one:</p>
+<pre class="nohighlight"><code>$ cd public_html &amp;&amp; python -m SimpleHTTPServer 8090</code></pre>
+<p>This uses Python2 to serve the current directory’s contents: browse to <a href="http://127.0.0.1:8090/gmap.html" class="uri">http://127.0.0.1:8090/gmap.html</a> to see an OpenStreetMap.</p>
+<p>Now, an application like dump1090 or dump978 can put data inside this directory and the map will display it.</p>
+<h3 id="run-log-and-visualize-dump1090">Run, log, and visualize dump1090</h3>
+<p>Finally, launch dump1090 and pipe its output to disk for logging:</p>
+<pre class="nohighlight"><code>$ ./dump1090 --write-json public_html/data &gt;&gt; log.txt</code></pre>
+<p>You should soon see aircraft showing up on the map:</p>
+<figure>
+<a href="http://i.imgur.com/IWjBF4r.png"><img src="http://i.imgur.com/IWjBF4r.png" alt="dump1090 in action"></a>
+<figcaption>
+dump1090 in action
+</figcaption>
+</figure>
+<h3 id="dump1090-example-output">dump1090 example output</h3>
+<p>Here’s some example lines from <code>log.txt</code>: this is the standard output of dump1090. (For debugging, looking at the last few lines of <code>log.txt</code> with <code>$ tail -f log.txt</code> can help.)</p>
+<pre class="nohighlight"><code>*8dab77ee99459081c0084e933a70;
+CRC: 000000
+RSSI: -22.7 dBFS
+Score: 1400
+Time: 26780.42us (phase: 300)
+DF 17: ADS-B message.
+  Capability     : 5 (Level 2+, airborne)
+  ICAO Address   : ab77ee
+  Extended Squitter  Type: 19
+  Extended Squitter  Sub : 1
+  Extended Squitter  Name: Airborne Velocity
+    EW status         : Valid
+    EW velocity       : -399
+    NS status         : Valid
+    NS velocity       : -13
+    Vertical status   : Valid
+    Vertical rate src : 0
+    Vertical rate     : 64
+    HAE/Baro offset   : 1925 ft
+
+*8da923cf99157717c004477716b8;
+CRC: 000000
+RSSI: -30.7 dBFS
+Score: 1400
+Time: 53030.33us (phase: 240)
+DF 17: ADS-B message.
+  Capability     : 5 (Level 2+, airborne)
+  ICAO Address   : a923cf
+  Extended Squitter  Type: 19
+  Extended Squitter  Sub : 1
+  Extended Squitter  Name: Airborne Velocity
+    EW status         : Valid
+    EW velocity       : -374
+    NS status         : Valid
+    NS velocity       : 189
+    Vertical status   : Valid
+    Vertical rate src : 0
+    Vertical rate     : 0
+    HAE/Baro offset   : 1750 ft</code></pre>
+<p>Note that the <code>Time</code> field above corresponds to microseconds since the application started. This provides a simple way of timestamping each observation, assuming you can tell when the application started.</p>
+<h2 id="dump978"><a href="https://github.com/mutability/dump978">dump978</a></h2>
+<h3 id="setup-1">Setup</h3>
+<p>Clone and build @mutability’s dump978 repository to collect general aviation beacons, which operate in the 978 MHz band. Don’t run this when in the same directory as <code>dump1090</code>—you almost never want a git repository inside another git repository.</p>
+<pre class="nohighlight"><code>$ git clone https://github.com/mutability/dump978.git
+$ cd dump978
+$ make -j4
+$ cp -r /PATH/TO/dump1090/public_html .
+$ mkdir -p public_html/data</code></pre>
+<p>The last two lines copy dump1090’s webapp to the dump978 directory and (re)creates a <code>data/</code> subdirectory.</p>
+<h3 id="start-external-webserver-1">Start external webserver</h3>
+<p>Following the same process as dump1090, we can start a webserver using plain Python2. We will choose a different port to avoid conflicts with the dump1090 webapp.</p>
+<pre class="nohighlight"><code>$ cd public_html &amp;&amp; python -m SimpleHTTPServer 8978</code></pre>
+<p>Open a browser tab to <a href="http://127.0.0.1:8978/gmap.html" class="uri">http://127.0.0.1:8978/gmap.html</a>.</p>
+<h3 id="run-log-and-visualize-dump978">Run, log, and visualize dump978</h3>
+<p>dump978 is a little different from dump1090, in that dump978 accepts binary samples output by <code>rtl_sdr</code>, rather than doing this behind-the-scenes:</p>
+<pre class="nohighlight"><code>$ rtl_sdr -f 978000000 -s 2083334 - | ./dump978 | tee --append log.txt | ./uat2json public_html/data</code></pre>
+<p>Soon, you should start seeing GA traffic in the web browser. dump978’s <code>uat2json</code> will update the webapp’s data once a second.</p>
+<blockquote>
+<p><strong>Caveat!</strong> The above logs <code>dump978</code>’s output to <code>log.txt</code>, <em>but without timestamps,</em> which might severely limit the use of this data! If you have <code>ts</code> (<code>brew install moreutils</code> on macOS), I recommend the following:</p>
+<p><code>$ rtl_sdr -f 978000000 -s 2083334 - | ./dump978 | ts '[%Y-%m-%d.%H.%M.%.S%z]' | tee --append log.txt | cut -d' ' -f2- | ./uat2json public_html/data</code></p>
+<p>This will prepend a timestamp, followed by a space, like <code>[2016-11-12.19.31.47.117154-0500]</code>, before each line. That <code>tee</code> writes such timestamped data to a file, but then the <code>cut</code> strips the timestamps before sending the original result to <code>uat2json</code>. (Caveat the second: that strftime specifier, <code>[%Y-%m-%d.%H.%M.%.S%z]</code> could be invalid on some systems, check!)</p>
+</blockquote>
+<figure>
+<a href="http://i.imgur.com/X7AiJFC.png"><img src="http://i.imgur.com/X7AiJFC.png" alt="dump978 in action"></a>
+<figcaption>
+dump978 in action
+</figcaption>
+</figure>
+<p>Beware: both browser windows (dump1090’s and dump978’s) will say “dump1090”, since we just copied dump1090’s webapp and are dumping 978 MHz data into it. The only difference is the port number in the URL.</p>
+<h3 id="dump978-example-output">dump978 example output</h3>
+<p>Here are some lines from the <code>log.txt</code> file produced by dump978:</p>
+<pre class="nohighlight"><code>-10a3a09839220f88e80218d911a83a202f00000000000000000000000019c0000000;rs=1;
+-10a3a0983921cf88e85e18d911a83a001f00000000000000000000000019c0000000;
++3916598895a4aea05a8006744c005011a02cd549833c31e70c1a833c31e6fc31c31832df0c392d4839e79e601855f0d70806157cb0c2044e232e79c0939379c142143347833c72c2fcf1cb1831e30c362d4839e79e6008b3b0d70811388cb9e3424e4de7050850cd1e0cf1cb3bf3c72d20c75c30d8b520e30c3082d4c84818022cec33c203d60f1d70811388cb9e3424e4de705518cf0bf3c71e5a8143b1d6fcf1c7069e7053014d480e3e004d113801194833c70d60385614833c71c7d79d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;rs=32;
++3916598895a4bfa000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;rs=32;
+-0b28c2ef38db29868efe279641940cc01105c4e6c4e6c40a82700300000000000000;rs=2;
+-00a3a0983921b388e88418d911a83a001900;</code></pre>
+<p>dump978 makes available a <code>uat2txt</code> executable, which produces the following when fed in the above:</p>
+<pre class="nohighlight"><code>$ cat log.txt | ./uat2txt
+HDR:
+ MDB Type:          2
+ Address:           A3A098 (ICAO address via ADS-B)
+SV:
+ NIC:               9
+ Latitude:          +40.1717
+ Longitude:         -83.7378
+ Altitude:          8900 ft (barometric)
+ N/S velocity:      -105 kt
+ E/W velocity:      115 kt
+ Track:             132
+ Speed:             155 kt
+ Vertical rate:     -64 ft/min (from geometric altitude)
+ UTC coupling:      yes
+ TIS-B site ID:     0
+AUXSV:
+ Sec. altitude:     9275 ft (geometric)
+
+HDR:
+ MDB Type:          2
+ Address:           A3A098 (ICAO address via ADS-B)
+SV:
+ NIC:               9
+ Latitude:          +40.1710
+ Longitude:         -83.7368
+ Altitude:          8900 ft (barometric)
+ N/S velocity:      -105 kt
+ E/W velocity:      115 kt
+ Track:             132
+ Speed:             155 kt
+ Vertical rate:     0 ft/min (from geometric altitude)
+ UTC coupling:      yes
+ TIS-B site ID:     0
+AUXSV:
+ Sec. altitude:     9275 ft (geometric)
+
+UPLINK:
+ Site Latitude:     +40.1395 (possibly invalid)
+ Site Longitude:    -83.9640 (possibly invalid)
+ UTC coupled:       yes
+ Slot ID:           14
+ TIS-B Site ID:     10
+INFORMATION FRAME:
+ Length:            181 bytes
+ Type:              0 (FIS-B APDU)
+FIS-B:
+ Flags:             
+ Product ID:        413 (Generic Textual Data Product APDU Payload Format Type 2) - Text (DLAC)
+ Product time:      19:00
+ Report type:       TAF
+ Report location:   KMUI
+ Report time:       301900Z
+ Text:
+3019/0101 27009KT 9999 FEW050 FEW200 QNH2990INS
+     BECMG 3120/3121 18006KT 9999 BKN050 QNH2984INS
+     BECMG 3123/3124 15006KT 8000 -SHRA BKN030 OVC150 QNH2984INS
+     TX30/3119Z TN15/3110Z
+     LAST NO AMDS AFT 3105 NEXT 3111=
+
+
+UPLINK:
+ Site Latitude:     +40.1395 (possibly invalid)
+ Site Longitude:    -83.9640 (possibly invalid)
+ UTC coupled:       yes
+ Slot ID:           31
+ TIS-B Site ID:     10
+
+HDR:
+ MDB Type:          1
+ Address:           28C2EF (TIS-B track file address)
+SV:
+ NIC:               6
+ Latitude:          +39.9769
+ Longitude:         -85.3885
+ Altitude:          14800 ft (barometric)
+ N/S velocity:      400 kt
+ E/W velocity:      96 kt
+ Track:             13
+ Speed:             411 kt
+ Vertical rate:     0 ft/min (from barometric altitude)
+ UTC coupling:      no
+ TIS-B site ID:     1
+MS:
+ Emitter category:  No information
+ Callsign:          unavailable
+ Emergency status:  No emergency
+ UAT version:       2
+ SIL:               2
+ Transmit MSO:      32
+ NACp:              7
+ NACv:              0
+ NICbaro:           0
+ Capabilities:      
+ Active modes:      
+ Target track type: true heading
+AUXSV:
+ Sec. altitude:     unavailable
+
+HDR:
+ MDB Type:          0
+ Address:           A3A098 (ICAO address via ADS-B)
+SV:
+ NIC:               9
+ Latitude:          +40.1707
+ Longitude:         -83.7364
+ Altitude:          8900 ft (barometric)
+ N/S velocity:      -105 kt
+ E/W velocity:      115 kt
+ Track:             132
+ Speed:             155 kt
+ Vertical rate:     0 ft/min (from geometric altitude)
+ UTC coupling:      yes
+ TIS-B site ID:     0</code></pre>
+<p>(Banner credit: NASA, Shuttle Carrier Aircraft (modified Boeing 747s), <a href="https://www.nasa.gov/centers/armstrong/multimedia/imagegallery/SCA/archive2.html#lowerAccordion-set1-slide102">ED11-0237-16</a>. Taken on August 2, 2011.)</p>
+<p>
+<small>Previous: <a href="/md-site/post/spherical-cap/">Random points on a spherical cap</a><br>Next: <a href="/md-site/post/ruby/">Make Ruby HTML tags</a></small>
+</p>
