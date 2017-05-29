@@ -1,0 +1,28 @@
+<!doctype html>
+<meta charset="utf-8" />
+
+<p>Hi!</p>
+
+<pre><code class="js">export default function sampleSphericalCap(params) {
+  params = params == null ? {N : 1, z : 0} : params;
+
+  const π = Math.PI;
+  const π2 = 2 * π;
+  const radPerDeg = π / 180;
+
+  const minZ =
+      (params.z ? +params.z
+                : (params.deg ? Math.cos(+params.deg * radPerDeg)
+                              : (params.rad ? Math.cos(+params.rad) : 0)));
+  const N = params.N ? +params.N : 1;
+  return pack(Array.from({length : N}, _ => {
+           const z = Math.random() * (1 - minZ) + minZ;
+           const r = Math.sqrt(1 - z * z);
+           const θ = Math.random() * π2;
+           const x = r * Math.cos(θ);
+           const y = r * Math.sin(θ);
+           return [ x, y, z ];
+         })).transpose(1, 0);
+}</code></pre>
+
+<p>What do we think of that?</p>

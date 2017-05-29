@@ -1,0 +1,294 @@
+<!doctype html>
+<head><meta charset="utf-8" />
+<title>Random points on a spherical cap</title>
+<meta name="description" content="An adventure in ES2015, spherical caps, and random sampling." />
+<meta name="twitter:card" value="summary">
+<meta property="og:title" content="Random points on a spherical cap" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="post/spherical-cap/index.html" />
+<meta property="og:image" content="jupiter-aurora.jpg" />
+<meta property="og:description" content="An adventure in ES2015, spherical caps, and random sampling." />
+<style>@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+  .parallax {
+    background-attachment: scroll;
+  }
+}
+
+pre,
+code {
+  font-family: Menlo, Monaco, Consolas, Inconsolata, "Andale Mono", "Fira Code", "Lucida Console", "Lucida Sans Typewriter", "Courier New", monospace;
+}
+
+pre {
+  padding: .5rem;
+  line-height: 1.25;
+  overflow-x: scroll;
+}
+
+a,
+a:visited {
+  color: #3498db;
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: #2980b9;
+}
+
+.modest-no-decoration {
+  text-decoration: none;
+}
+
+html {
+  font-size: 12px;
+}
+
+@media screen and (min-width: 32rem) and (max-width: 48rem) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 48rem) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  line-height: 1.85;
+}
+
+p,
+.modest-p {
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
+}
+
+h1,
+.modest-h1,
+h2,
+.modest-h2,
+h3,
+.modest-h3,
+h4,
+.modest-h4 {
+  margin: 1.414rem 0 .5rem;
+  font-weight: inherit;
+  line-height: 1.42;
+}
+
+h1,
+.modest-h1 {
+  margin-top: 0;
+  font-size: 3.998rem;
+}
+
+h2,
+.modest-h2 {
+  font-size: 2.827rem;
+}
+
+h3,
+.modest-h3 {
+  font-size: 1.999rem;
+}
+
+h4,
+.modest-h4 {
+  font-size: 1.414rem;
+}
+
+h5,
+.modest-h5 {
+  font-size: 1.121rem;
+}
+
+h6,
+.modest-h6 {
+  font-size: .88rem;
+}
+
+small,
+.modest-small {
+  font-size: .707em;
+}
+
+/* https://github.com/mrmrs/fluidity */
+
+img,
+canvas,
+iframe,
+video,
+svg,
+select,
+textarea {
+  max-width: 100%;
+}
+
+html {
+  font-size: 18px;
+  max-width: 100%;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  color: #444;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  margin: 0 auto;
+  max-width: 48rem;
+  line-height: 1.45;
+  padding: 0 .25rem .25rem;
+}
+
+h1,
+h2,
+h3 {
+  border-bottom: 2px solid #fafafa;
+  margin-bottom: 1.15rem;
+  padding-bottom: .5rem;
+  text-align: center;
+}
+
+blockquote {
+  border-left: 8px solid #fafafa;
+  padding: 1rem;
+}
+
+pre,
+code {
+  background-color: #fafafa;
+}
+
+figure {
+  position: relative;
+  text-align: center;
+}
+figcaption {
+  color: #999;
+  font-size: 0.9em;
+  margin-top: 0.5em;
+}
+
+/* https://css-tricks.com/full-width-containers-limited-width-parents/ */
+.full-width {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+.no-top {
+  margin-top: 0px;
+  padding-top:0px;
+}
+</style>
+
+</head>
+<figure class="full-width no-top"><img src="jupiter-aurora.jpg"></figure><h1>Random points on a spherical cap</h1><p><em>By <a href="/md-site#contact">Ahmed Fasih</a>. Updated on Fri, 19 Aug 2016 04:59:34 GMT, tagged with ‘math’—‘tech’.</em></p><div id="divPlot">
+</div>
+<script src="cap-random.min.js"></script>
+<script src="plotly-gl3d-1.27.1.min.js" charset="utf8"></script>
+<script src="demo.js"></script>
+<p>@Pedro77 <a href="http://stackoverflow.com/q/38997302/500207">posted</a> their approach to generating random points on the surface of a sphere contained in a cone emanating from the middle of the sphere—a cone pointing in a specified direction and with a specified angular extent.</p>
+<p>In other words, they wanted a way to randomly sample points from the <em>spherical cap</em> (<a href="http://mathworld.wolfram.com/SphericalCap.html">Mathworld</a>, <a href="https://en.wikipedia.org/wiki/Spherical_cap">Wikipedia</a>) parameterized by</p>
+<ul>
+<li>an angle, rather than a height, and</li>
+<li>a specific direction, in terms of a 3D vector, rather than assuming the cap was centered on the sphere’s North Pole.</li>
+</ul>
+<p>@Pedro77’s technique used <em>rejection sampling</em> (generating random points on the sphere’s surface until one was found that met the criteria).</p>
+<p>I was able to <a href="http://stackoverflow.com/a/39003745/500207">cobble together</a> an implementation of a deterministic algorithm (in 😭Matlab😭) using the insights from <a href="http://math.stackexchange.com/a/205589/81266">@joriki</a> and <a href="http://math.stackexchange.com/a/44691/81266">@Jim Belk</a>—see these to learn some surprising facts about the surface areas of cuts of cylinders and spheres (they’re the same!).</p>
+<p>In order to more easily visualize samples from spherical caps, and to get a feel for <a href="http://scijs.net/packages/"><strong>scijs</strong></a> and modern JavaScript as exemplified by <a href="https://github.com/d3/d3#installing">d3 4.0</a> (“D3 is written using <em>ES2015 modules</em> … create a custom bundle using <em>Rollup</em>…”), I put together an ES2015 package to generate points on such directed spherical caps, <a href="https://github.com/fasiha/sphere-cap-random">sphere-cap-random</a>, which can run in the browser or in Node.</p>
+<p>Here’s a taste of what that looks like (here’s <a href="https://github.com/fasiha/sphere-cap-random/blob/gh-pages/src/capRandom.js">the rest</a>):</p>
+<pre class="javascript"><code>export default function sampleSphericalCap(params) {
+  params = params == null ? {N : 1, z : 0} : params;
+
+  const π = Math.PI;
+  const π2 = 2 * π;
+  const radPerDeg = π / 180;
+
+  const minZ =
+      (params.z ? +params.z
+                : (params.deg ? Math.cos(+params.deg * radPerDeg)
+                              : (params.rad ? Math.cos(+params.rad) : 0)));
+  const N = params.N ? +params.N : 1;
+  return pack(Array.from({length : N}, _ =&gt; {
+           const z = Math.random() * (1 - minZ) + minZ;
+           const r = Math.sqrt(1 - z * z);
+           const θ = Math.random() * π2;
+           const x = r * Math.cos(θ);
+           const y = r * Math.sin(θ);
+           return [ x, y, z ];
+         })).transpose(1, 0);
+}</code></pre>
+<p>The 3D scatter plot above, courtesy of <a href="https://plot.ly/javascript/3d-scatter-plots/"><strong>plotly.js</strong></a>, shows random samples from three spherical caps:</p>
+<ul>
+<li>the 30° spherical cap at the North Pole,</li>
+<li>the 30° spherical cap pointing towards the middle of the first octant, <code>[1, 1, 1]</code>, and</li>
+<li>the 110° spherical cap, which looks like a Dymaxion dome, at the South Pole.</li>
+</ul>
+<p>(Banner image: Hubble Space Telescope image of Juputer, dated 2016 June 29, NASA Goddard Space Flight Center, Greenbelt, Maryland, USA. Official <a href="https://www.flickr.com/photos/gsfc/28000029525/">Flickr</a>. <a href="https://commons.wikimedia.org/wiki/File:Hubble_Captures_Vivid_Auroras_in_Jupiter%E2%80%99s_Atmosphere_(28000029525).jpg">Wikimedia</a>.)</p>
+<p>
+<small>Previous: <a href="/md-site/post/texshade/">Texture-shaded globes</a><br>Next: <a href="/md-site/post/dissimilarity/">Conditional probability and the criterion of dissimilarity</a></small>
+</p>

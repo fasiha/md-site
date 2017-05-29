@@ -7,6 +7,7 @@
     "bluebird": "^3.5.0",
     "find": "^0.2.7",
     "js-yaml": "^3.8.4",
+    "jsdom": "^11.0.0",
     "pandoc-filter": "^0.1.6"
   }
 }

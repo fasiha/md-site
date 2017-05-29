@@ -1,5 +1,8 @@
 "use strict";
 
+var jsdom = require("jsdom");
+var {JSDOM} = jsdom;
+
 var fs = require('fs');
 var path = require('path');
 var yaml = require('js-yaml');
@@ -8,11 +11,14 @@ var spawnSync = require('child_process').spawnSync;
 
 var PREPATH = 'md-site'; // i.e., if site lives at foo.edu/~me, RELPATH='~me'.
 
-var css = '<style>' + fs.readFileSync('modest.css', 'utf8') + '</style>\n';
+var css =
+    '<style>' + fs.readFileSync('assets/modest.css', 'utf8') + '</style>\n';
+
 var plotlyPreamble =
     `<script src="${
                     filepathToAbspath('assets/plotly-basic-1.27.1.min.js')
                   }" charset="utf-8"></script>\n`;
+
 var mathjaxPreamble = `<script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   TeX: { equationNumbers: { autoNumber: "AMS" } },
@@ -22,6 +28,12 @@ MathJax.Hub.Config({
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML">
 </script>
 `;
+
+var hl = fs.readFileSync('assets/highlight.min.js', 'utf8');
+var hlcss = '<style>' +
+            fs.readFileSync('assets/tomorrow-night-eighties.css', 'utf8') +
+            '</style>\n';
+
 var defaultMeta = {
   title : 'Insight≠Numbers',
   description : 'A blog by Ahmed Fasih',
@@ -32,7 +44,7 @@ var defaultMeta = {
   tags : [],
   author : 'Ahmed Fasih',
   plotly : false,
-  mathjax : false
+  mathjax : false,
 };
 
 var articles = new Map([]);
@@ -81,12 +93,22 @@ function buildOneMarkdown(meta, prevMeta, nextMeta, metas, tagsToMetas) {
   if (meta.mathjax) {
     html = html.replace(/\\&amp;/g, '&');
   }
+  var tohighlight = html.indexOf('<pre><code') >= 0;
+  if (tohighlight) {
+    let window = (new JSDOM(html, {runScripts : "outside-only"})).window;
+    window.eval(hl);
+    window.eval(`hljs.initHighlighting();`)
+    html = window.document.body.innerHTML;
+  }
 
   var head = '<!doctype html>\n<head><meta charset="utf-8" />\n';
   head += `<title>${meta.title}</title>\n`
   head += social(outfile, meta.title, meta.description,
                  meta.socialBanner || meta.banner);
   head += css;
+  if (tohighlight) {
+    head += hlcss;
+  }
   if (meta.plotly) {
     head += plotlyPreamble;
   }
