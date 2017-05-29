@@ -93,7 +93,7 @@ function buildOneMarkdown(meta, prevMeta, nextMeta, metas, tagsToMetas) {
   if (meta.mathjax) {
     html = html.replace(/\\&amp;/g, '&');
   }
-  var tohighlight = html.indexOf('<pre><code') >= 0;
+  var tohighlight = html.search(/<pre[^<]*<code/) >= 0;
   if (tohighlight) {
     let window = (new JSDOM(html, {runScripts : "outside-only"})).window;
     window.eval(hl);

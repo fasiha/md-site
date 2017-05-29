@@ -6,7 +6,11 @@ banner: 'jupiter-aurora.jpg'
 tags: ["math", "tech"]
 ---
 
-<div id="divPlot"></div>
+**tl;dr** [JavaScript](https://github.com/fasiha/sphere-cap-random) (and [Matlab](https://stackoverflow.com/a/39003745/500207)) library to draw random samples from arbitrary spherical caps.
+
+<figure><div id="divPlot"></div>
+<figcaption>Interactive 3D scatterplot of samples from three spherical caps. [Screenshot](screenshot.png)</figcaption>
+</figure>
 <script src="cap-random.min.js"></script>
 <script src="plotly-gl3d-1.27.1.min.js" charset="utf8"></script>
 <script src="demo.js"></script>
@@ -22,7 +26,7 @@ In other words, they wanted a way to randomly sample points from the *spherical 
 
 I was able to [cobble together](http://stackoverflow.com/a/39003745/500207) an implementation of a deterministic algorithm (in 😭Matlab😭) using the insights from [@joriki](http://math.stackexchange.com/a/205589/81266) and [@Jim Belk](http://math.stackexchange.com/a/44691/81266)—see these to learn some surprising facts about the surface areas of cuts of cylinders and spheres (they’re the same!).
 
-In order to more easily visualize samples from spherical caps, and to get a feel for [**scijs**](http://scijs.net/packages/) and modern JavaScript as exemplified by [d3 4.0](https://github.com/d3/d3#installing) (“D3 is written using *ES2015 modules* … create a custom bundle using *Rollup*…”), I put together an ES2015 package to generate points on such directed spherical caps, [sphere-cap-random](https://github.com/fasiha/sphere-cap-random), which can run in the browser or in Node.
+In order to more easily visualize samples from spherical caps, and to get a feel for [*scijs*](http://scijs.net/packages/) and modern JavaScript as exemplified by [d3 4.0](https://github.com/d3/d3#installing) (“D3 is written using *ES2015 modules* … create a custom bundle using *Rollup*…”), I put together an ES2015 package to generate points on such directed spherical caps, [sphere-cap-random](https://github.com/fasiha/sphere-cap-random), which can run in the browser or in Node.
 
 Here’s a taste of what that looks like (here’s [the rest](https://github.com/fasiha/sphere-cap-random/blob/gh-pages/src/capRandom.js)):
 ```javascript
@@ -49,7 +53,9 @@ export default function sampleSphericalCap(params) {
 }
 ```
 
-The 3D scatter plot above, courtesy of [**plotly.js**](https://plot.ly/javascript/3d-scatter-plots/), shows random samples from three spherical caps:
+(N.B. These days, i.e., May 2017, I have converged to using Node-style modules, Browserify, and Google Closure Compiler’s JavaScript port. Node modules and Browserify are dead-simple. Google Closure Compiler brings the heavy magic, with proper dead-code elimination and whole-program optimization—and is [also](https://www.npmjs.com/package/google-closure-compiler) dead-simple to use!)
+
+The 3D scatter plot above, courtesy of [*plotly.js*](https://plot.ly/javascript/3d-scatter-plots/), shows random samples from three spherical caps:
 
 - the 30° spherical cap at the North Pole,
 - the 30° spherical cap pointing towards the middle of the first octant, `[1, 1, 1]`, and

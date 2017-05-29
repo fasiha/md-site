@@ -244,10 +244,91 @@ figcaption {
   padding-top:0px;
 }
 </style>
+<style>/* Tomorrow Night Eighties Theme */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #999999;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+  color: #f2777a;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+  color: #f99157;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+  color: #ffcc66;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #99cc99;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+  color: #6699cc;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #cc99cc;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  background: #2d2d2d;
+  color: #cccccc;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
 
 </head>
-<figure class="full-width no-top"><img src="jupiter-aurora.jpg"></figure><h1>Random points on a spherical cap</h1><p><em>By <a href="/md-site#contact">Ahmed Fasih</a>. Updated on Fri, 19 Aug 2016 04:59:34 GMT, tagged with ‘math’—‘tech’.</em></p><div id="divPlot">
+<figure class="full-width no-top"><img src="jupiter-aurora.jpg"></figure><h1>Random points on a spherical cap</h1><p><em>By <a href="/md-site#contact">Ahmed Fasih</a>. Updated on Fri, 19 Aug 2016 04:59:34 GMT, tagged with ‘math’—‘tech’.</em></p><p><strong>tl;dr</strong> <a href="https://github.com/fasiha/sphere-cap-random">JavaScript</a> (and <a href="https://stackoverflow.com/a/39003745/500207">Matlab</a>) library to draw random samples from arbitrary spherical caps.</p>
+<figure>
+<div id="divPlot">
 </div>
+<figcaption>
+Interactive 3D scatterplot of samples from three spherical caps. <a href="screenshot.png">Screenshot</a>
+</figcaption>
+</figure>
 <script src="cap-random.min.js"></script>
 <script src="plotly-gl3d-1.27.1.min.js" charset="utf8"></script>
 <script src="demo.js"></script>
@@ -259,30 +340,31 @@ figcaption {
 </ul>
 <p>@Pedro77’s technique used <em>rejection sampling</em> (generating random points on the sphere’s surface until one was found that met the criteria).</p>
 <p>I was able to <a href="http://stackoverflow.com/a/39003745/500207">cobble together</a> an implementation of a deterministic algorithm (in 😭Matlab😭) using the insights from <a href="http://math.stackexchange.com/a/205589/81266">@joriki</a> and <a href="http://math.stackexchange.com/a/44691/81266">@Jim Belk</a>—see these to learn some surprising facts about the surface areas of cuts of cylinders and spheres (they’re the same!).</p>
-<p>In order to more easily visualize samples from spherical caps, and to get a feel for <a href="http://scijs.net/packages/"><strong>scijs</strong></a> and modern JavaScript as exemplified by <a href="https://github.com/d3/d3#installing">d3 4.0</a> (“D3 is written using <em>ES2015 modules</em> … create a custom bundle using <em>Rollup</em>…”), I put together an ES2015 package to generate points on such directed spherical caps, <a href="https://github.com/fasiha/sphere-cap-random">sphere-cap-random</a>, which can run in the browser or in Node.</p>
+<p>In order to more easily visualize samples from spherical caps, and to get a feel for <a href="http://scijs.net/packages/"><em>scijs</em></a> and modern JavaScript as exemplified by <a href="https://github.com/d3/d3#installing">d3 4.0</a> (“D3 is written using <em>ES2015 modules</em> … create a custom bundle using <em>Rollup</em>…”), I put together an ES2015 package to generate points on such directed spherical caps, <a href="https://github.com/fasiha/sphere-cap-random">sphere-cap-random</a>, which can run in the browser or in Node.</p>
 <p>Here’s a taste of what that looks like (here’s <a href="https://github.com/fasiha/sphere-cap-random/blob/gh-pages/src/capRandom.js">the rest</a>):</p>
-<pre class="javascript"><code>export default function sampleSphericalCap(params) {
-  params = params == null ? {N : 1, z : 0} : params;
+<pre class="javascript"><code class="hljs"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sampleSphericalCap</span>(<span class="hljs-params">params</span>) </span>{
+  params = params == <span class="hljs-literal">null</span> ? {<span class="hljs-attr">N</span> : <span class="hljs-number">1</span>, <span class="hljs-attr">z</span> : <span class="hljs-number">0</span>} : params;
 
-  const π = Math.PI;
-  const π2 = 2 * π;
-  const radPerDeg = π / 180;
+  <span class="hljs-keyword">const</span> π = <span class="hljs-built_in">Math</span>.PI;
+  <span class="hljs-keyword">const</span> π<span class="hljs-number">2</span> = <span class="hljs-number">2</span> * π;
+  <span class="hljs-keyword">const</span> radPerDeg = π / <span class="hljs-number">180</span>;
 
-  const minZ =
+  <span class="hljs-keyword">const</span> minZ =
       (params.z ? +params.z
-                : (params.deg ? Math.cos(+params.deg * radPerDeg)
-                              : (params.rad ? Math.cos(+params.rad) : 0)));
-  const N = params.N ? +params.N : 1;
-  return pack(Array.from({length : N}, _ =&gt; {
-           const z = Math.random() * (1 - minZ) + minZ;
-           const r = Math.sqrt(1 - z * z);
-           const θ = Math.random() * π2;
-           const x = r * Math.cos(θ);
-           const y = r * Math.sin(θ);
-           return [ x, y, z ];
-         })).transpose(1, 0);
+                : (params.deg ? <span class="hljs-built_in">Math</span>.cos(+params.deg * radPerDeg)
+                              : (params.rad ? <span class="hljs-built_in">Math</span>.cos(+params.rad) : <span class="hljs-number">0</span>)));
+  <span class="hljs-keyword">const</span> N = params.N ? +params.N : <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">return</span> pack(<span class="hljs-built_in">Array</span>.from({<span class="hljs-attr">length</span> : N}, _ =&gt; {
+           <span class="hljs-keyword">const</span> z = <span class="hljs-built_in">Math</span>.random() * (<span class="hljs-number">1</span> - minZ) + minZ;
+           <span class="hljs-keyword">const</span> r = <span class="hljs-built_in">Math</span>.sqrt(<span class="hljs-number">1</span> - z * z);
+           <span class="hljs-keyword">const</span> θ = <span class="hljs-built_in">Math</span>.random() * π<span class="hljs-number">2</span>;
+           <span class="hljs-keyword">const</span> x = r * <span class="hljs-built_in">Math</span>.cos(θ);
+           <span class="hljs-keyword">const</span> y = r * <span class="hljs-built_in">Math</span>.sin(θ);
+           <span class="hljs-keyword">return</span> [ x, y, z ];
+         })).transpose(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
 }</code></pre>
-<p>The 3D scatter plot above, courtesy of <a href="https://plot.ly/javascript/3d-scatter-plots/"><strong>plotly.js</strong></a>, shows random samples from three spherical caps:</p>
+<p>(N.B. These days, i.e., May 2017, I have converged to using Node-style modules, Browserify, and Google Closure Compiler’s JavaScript port. Node modules and Browserify are dead-simple. Google Closure Compiler brings the heavy magic, with proper dead-code elimination and whole-program optimization—and is <a href="https://www.npmjs.com/package/google-closure-compiler">also</a> dead-simple to use!)</p>
+<p>The 3D scatter plot above, courtesy of <a href="https://plot.ly/javascript/3d-scatter-plots/"><em>plotly.js</em></a>, shows random samples from three spherical caps:</p>
 <ul>
 <li>the 30° spherical cap at the North Pole,</li>
 <li>the 30° spherical cap pointing towards the middle of the first octant, <code>[1, 1, 1]</code>, and</li>
