@@ -82,7 +82,7 @@ function buildOneMarkdown(meta, prevMeta, nextMeta, metas, tagsToMetas) {
     html = html.replace(/\\&amp;/g, '&');
   }
 
-  var head = '<head><meta charset="utf-8" />\n';
+  var head = '<!doctype html>\n<head><meta charset="utf-8" />\n';
   head += `<title>${meta.title}</title>\n`
   head += social(outfile, meta.title, meta.description,
                  meta.socialBanner || meta.banner);
