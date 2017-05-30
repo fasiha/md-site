@@ -1,0 +1,370 @@
+<!doctype html>
+<head><meta charset="utf-8" />
+<title>How Rust slays brittle indexing logic.</title>
+<meta name="description" content="A newbie’s response to Steve Klabnik’s question: what does Rust solve for me?" />
+<meta name="twitter:card" value="summary">
+<meta property="og:title" content="How Rust slays brittle indexing logic." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="post/rust-slays-brittle-indexing/index.html" />
+<meta property="og:image" content="hematite.jpg" />
+<meta property="og:description" content="A newbie’s response to Steve Klabnik’s question: what does Rust solve for me?" />
+<style>@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+  .parallax {
+    background-attachment: scroll;
+  }
+}
+
+pre,
+code {
+  font-family: Menlo, Monaco, Consolas, Inconsolata, "Andale Mono", "Fira Code", "Lucida Console", "Lucida Sans Typewriter", "Courier New", monospace;
+}
+
+pre {
+  padding: .5rem;
+  line-height: 1.25;
+  overflow-x: scroll;
+}
+
+a,
+a:visited {
+  color: #3498db;
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: #2980b9;
+}
+
+.modest-no-decoration {
+  text-decoration: none;
+}
+
+html {
+  font-size: 12px;
+}
+
+@media screen and (min-width: 32rem) and (max-width: 48rem) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 48rem) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  line-height: 1.85;
+}
+
+p,
+.modest-p {
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
+}
+
+h1,
+.modest-h1,
+h2,
+.modest-h2,
+h3,
+.modest-h3,
+h4,
+.modest-h4 {
+  margin: 1.414rem 0 .5rem;
+  font-weight: inherit;
+  line-height: 1.42;
+}
+
+h1,
+.modest-h1 {
+  margin-top: 0;
+  font-size: 3.998rem;
+}
+
+h2,
+.modest-h2 {
+  font-size: 2.827rem;
+}
+
+h3,
+.modest-h3 {
+  font-size: 1.999rem;
+}
+
+h4,
+.modest-h4 {
+  font-size: 1.414rem;
+}
+
+h5,
+.modest-h5 {
+  font-size: 1.121rem;
+}
+
+h6,
+.modest-h6 {
+  font-size: .88rem;
+}
+
+small,
+.modest-small {
+  font-size: .707em;
+}
+
+/* https://github.com/mrmrs/fluidity */
+
+img,
+canvas,
+iframe,
+video,
+svg,
+select,
+textarea {
+  max-width: 100%;
+}
+
+html {
+  font-size: 18px;
+  max-width: 100%;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  color: #444;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  margin: 0 auto;
+  max-width: 48rem;
+  line-height: 1.45;
+  padding: 0 .25rem .25rem;
+}
+
+h1,
+h2,
+h3 {
+  border-bottom: 2px solid #fafafa;
+  margin-bottom: 1.15rem;
+  padding-bottom: .5rem;
+  text-align: center;
+}
+
+blockquote {
+  border-left: 8px solid #fafafa;
+  padding: 1rem;
+}
+
+pre,
+code {
+  background-color: #fafafa;
+}
+
+figure {
+  position: relative;
+  text-align: center;
+}
+figcaption {
+  color: #999;
+  font-size: 0.9em;
+  margin-top: 0.5em;
+}
+
+/* https://css-tricks.com/full-width-containers-limited-width-parents/ */
+.full-width {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+.no-top {
+  margin-top: 0px;
+  padding-top:0px;
+}
+</style>
+<style>/* Tomorrow Night Eighties Theme */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #999999;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+  color: #f2777a;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+  color: #f99157;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+  color: #ffcc66;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #99cc99;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+  color: #6699cc;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #cc99cc;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  background: #2d2d2d;
+  color: #cccccc;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+
+</head>
+<figure class="full-width no-top"><img src="hematite.jpg"></figure><h1>How Rust slays brittle indexing logic.</h1><p><em>By <a href="/md-site#contact">Ahmed Fasih</a>. Updated on Thu, 05 Jan 2017 14:52:39 GMT, tagged with ‘tech’.</em></p><p><em>(Originally posted on <a href="https://gist.github.com/fasiha/886302b75e480d4b4e4e31f3eba055bb">Gist</a>.)</em></p>
+<p>In writing one’s own <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding">Base64</a> codec for the <a href="https://cryptopals.com/sets/1/challenges/1">Cryptopals Crypto Challenge</a> in Rust (see my <a href="https://github.com/fasiha/rosetta-cryptopals">multilingual code here</a>!), one gets to a point where every chunk of <em>four</em> adjacent elements in an input vector has to be transformed into a chunk of <em>three</em> elements in an output vector.</p>
+<blockquote>
+<p>That is, the string <code>SSdt</code> containing four ASCII bytes becomes the string <code>I'm</code> containing three ASCII bytes, and <code>IGtp</code> becomes <code>&nbsp;ki</code>, and so on, so that <code>SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t</code> is decoded to <code>I'm killing your brain like a poisonous mushroom</code>.</p>
+</blockquote>
+<p>I had a function to do this four-to-three downconversion but looping over the two arrays, lining up the indexes, the keeping track of magic threes and magic fours in my code gave me a headache as I worked through writing the following:</p>
+<pre class="rust"><code class="hljs"><span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">decode</span></span>(s: &amp;[<span class="hljs-built_in">u8</span>]) -&gt; <span class="hljs-built_in">Vec</span>&lt;<span class="hljs-built_in">u8</span>&gt; {
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> out: <span class="hljs-built_in">Vec</span>&lt;<span class="hljs-built_in">u8</span>&gt; = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">0</span>; s.len() / <span class="hljs-number">4</span> * <span class="hljs-number">3</span>];
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..out.len() / <span class="hljs-number">3</span> {
+        <span class="hljs-keyword">let</span> v = &amp;s[i * <span class="hljs-number">4</span>..i * <span class="hljs-number">4</span> + <span class="hljs-number">4</span>];
+        &amp;out[i * <span class="hljs-number">3</span>..i * <span class="hljs-number">3</span> + <span class="hljs-number">3</span>].copy_from_slice(&amp;quad2triplet(v[<span class="hljs-number">0</span>], v[<span class="hljs-number">1</span>], v[<span class="hljs-number">2</span>], v[<span class="hljs-number">3</span>]));
+    }
+    out
+}</code></pre>
+<p>I thought Rust was just C with safety and type inference, so keeping track of indexes like this is just how it was done.</p>
+<p>(Caveat, the code above is a tiny bit wrong—it’ll compile and give you the right answer but might pad it with one or two bytes that need trimming if the input ended in <code>=</code>.)</p>
+<p>After Rusting a few more Cryptopals challenges, and binge-reading the standard library’s documentation on <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html">iterators</a> and <a href="https://doc.rust-lang.org/std/primitive.slice.html">slices</a>, I finally realized this decoder could be written entirely without brittle magic-numbered indexing arithmetic:</p>
+<pre class="rust"><code class="hljs"><span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">decode0</span></span>(s: &amp;[<span class="hljs-built_in">u8</span>]) -&gt; <span class="hljs-built_in">Vec</span>&lt;<span class="hljs-built_in">u8</span>&gt; {
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> out: <span class="hljs-built_in">Vec</span>&lt;<span class="hljs-built_in">u8</span>&gt; = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">0</span>; s.len() / <span class="hljs-number">4</span> * <span class="hljs-number">3</span>];
+    <span class="hljs-keyword">for</span> (v, vo) <span class="hljs-keyword">in</span> s.chunks(<span class="hljs-number">4</span>).zip(out.as_mut_slice().chunks_mut(<span class="hljs-number">3</span>)) {
+        vo.copy_from_slice(&amp;quad2triplet(v[<span class="hljs-number">0</span>], v[<span class="hljs-number">1</span>], v[<span class="hljs-number">2</span>], v[<span class="hljs-number">3</span>]))
+    }
+    out
+}</code></pre>
+<p>Just to emphasize the crucial lines—before:</p>
+<pre class="rust"><code class="hljs"><span class="hljs-comment">// BEFORE: 🤞</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..out.len() / <span class="hljs-number">3</span> { &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <span class="hljs-comment">// (🏸)</span>
+ &nbsp; &nbsp;<span class="hljs-keyword">let</span> v = &amp;s[i * <span class="hljs-number">4</span>..i * <span class="hljs-number">4</span> + <span class="hljs-number">4</span>]; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <span class="hljs-comment">// (🏑)</span>
+ &nbsp; &nbsp;&amp;out[i * <span class="hljs-number">3</span>..i * <span class="hljs-number">3</span> + <span class="hljs-number">3</span>].copy_from_slice(<span class="hljs-comment">/*...*/</span>); &nbsp; <span class="hljs-comment">// (🏏)</span>
+}</code></pre>
+<p>and after:</p>
+<pre class="rust"><code class="hljs"><span class="hljs-comment">// AFTER: 🙌</span>
+<span class="hljs-keyword">for</span> (v, vo) <span class="hljs-keyword">in</span> s.chunks(<span class="hljs-number">4</span>).zip(out.as_mut_slice().chunks_mut(<span class="hljs-number">3</span>)) {
+    vo.copy_from_slice(<span class="hljs-comment">/*...*/</span>)
+}</code></pre>
+<p>At first glance, the changes might look insignificant, but I reiterate.</p>
+<p><em>No</em> <strong>more</strong> <strong><em>indexing</em></strong>.</p>
+<p>This is big. Before coding, the idea in one’s mind is, “take four-chunks, transform them into three-chunks”.</p>
+<p>Then one labors for a few seconds–minutes ironing out three separate indexes: (🏸) how many 3-chunks in the output, each corresponding to (🏑) which chunk of the input, each going to (🏏) which chunk of the output.</p>
+<p>And now, Rust—<em>Rust</em>, billed as a safe systems-level language, which I interpreted to mean “C with type inference”—lets us quite literally express our <em>initial</em> idea: we talk about <code>chunks(4)</code> of the input, and <code>chunks_mut(3)</code> of the output, and that’s it.</p>
+<p>This, my friends, is much bigger than safety or systems programming. This is about ML-grade expressivity in a non-garbage-collected, compiled language.</p>
+<p>(N.B. And it’s not just this example. I’m compiling a list of functions where I thought, “Wow, this is Clojure-clear”. Which is a compliment to Rust.)</p>
+<p>(PS. The full code is here: <a href="https://github.com/fasiha/rosetta-cryptopals/blob/0b72f2dfc658b0c103b60aa4becf21289386cf05/cryptobasics/src/base64decode.rs#L24-L39">base64decode.rs</a>. Also, many thanks to Michael Gattozzi’s <a href="https://mgattozzi.com/rust-is">“Rust is it’s community”</a> and <a href="https://mgattozzi.com/blog-about-rust">“Why you should be blogging about Rust”</a> for prodding me to write this brief note.)</p>
+<p>(Banner image credit: Didier Descouens (<a href="https://commons.wikimedia.org/wiki/User:Archaeodontosaurus">User:Archaeodontosaurus</a>), <em>Hematite Iron-Rose</em>, from Ouro Preto, in Minas Gerais, Brazil. <a href="https://en.wikipedia.org/wiki/File:H%C3%A9matite_Rose_de_Fer.jpg">Wikimedia</a>.)</p>
+<p>
+<small>Previous: <a href="/md-site/post/dissimilarity/">Conditional probability and the criterion of dissimilarity</a><br>Next: <a href="/md-site/post/kanjibreak/">Announcing: KanjiBreak</a></small>
+</p>
