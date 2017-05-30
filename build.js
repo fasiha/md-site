@@ -29,7 +29,7 @@ MathJax.Hub.Config({
 </script>
 `;
 
-var hl = fs.readFileSync('assets/highlight.min.js', 'utf8');
+var hl = fs.readFileSync('assets/highlight.pack.js', 'utf8');
 var hlcss = '<style>' +
             fs.readFileSync('assets/tomorrow-night-eighties.css', 'utf8') +
             '</style>\n';

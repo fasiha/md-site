@@ -1,0 +1,403 @@
+<!doctype html>
+<head><meta charset="utf-8" />
+<title>Measure your code, or, Replicating columns in Matlab</title>
+<meta name="description" content="Three-ish implementations of an array slicing-and-dicing problem… in Matlab." />
+<meta name="twitter:card" value="summary">
+<meta property="og:title" content="Measure your code, or, Replicating columns in Matlab" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="post/replicating-matlab-columns/index.html" />
+<meta property="og:image" content="worker.jpg" />
+<meta property="og:description" content="Three-ish implementations of an array slicing-and-dicing problem… in Matlab." />
+<style>@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+  .parallax {
+    background-attachment: scroll;
+  }
+}
+
+pre,
+code {
+  font-family: Menlo, Monaco, Consolas, Inconsolata, "Andale Mono", "Fira Code", "Lucida Console", "Lucida Sans Typewriter", "Courier New", monospace;
+}
+
+pre {
+  padding: .5rem;
+  line-height: 1.25;
+  overflow-x: scroll;
+}
+
+a,
+a:visited {
+  color: #3498db;
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: #2980b9;
+}
+
+.modest-no-decoration {
+  text-decoration: none;
+}
+
+html {
+  font-size: 12px;
+}
+
+@media screen and (min-width: 32rem) and (max-width: 48rem) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 48rem) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  line-height: 1.85;
+}
+
+p,
+.modest-p {
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
+}
+
+h1,
+.modest-h1,
+h2,
+.modest-h2,
+h3,
+.modest-h3,
+h4,
+.modest-h4 {
+  margin: 1.414rem 0 .5rem;
+  font-weight: inherit;
+  line-height: 1.42;
+}
+
+h1,
+.modest-h1 {
+  margin-top: 0;
+  font-size: 3.998rem;
+}
+
+h2,
+.modest-h2 {
+  font-size: 2.827rem;
+}
+
+h3,
+.modest-h3 {
+  font-size: 1.999rem;
+}
+
+h4,
+.modest-h4 {
+  font-size: 1.414rem;
+}
+
+h5,
+.modest-h5 {
+  font-size: 1.121rem;
+}
+
+h6,
+.modest-h6 {
+  font-size: .88rem;
+}
+
+small,
+.modest-small {
+  font-size: .707em;
+}
+
+/* https://github.com/mrmrs/fluidity */
+
+img,
+canvas,
+iframe,
+video,
+svg,
+select,
+textarea {
+  max-width: 100%;
+}
+
+html {
+  font-size: 18px;
+  max-width: 100%;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  color: #444;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  margin: 0 auto;
+  max-width: 48rem;
+  line-height: 1.45;
+  padding: 0 .25rem .25rem;
+}
+
+h1,
+h2,
+h3 {
+  border-bottom: 2px solid #fafafa;
+  margin-bottom: 1.15rem;
+  padding-bottom: .5rem;
+  text-align: center;
+}
+
+blockquote {
+  border-left: 8px solid #fafafa;
+  padding: 1rem;
+}
+
+pre,
+code {
+  background-color: #fafafa;
+}
+
+figure {
+  position: relative;
+  text-align: center;
+}
+figcaption {
+  color: #999;
+  font-size: 0.9em;
+  margin-top: 0.5em;
+}
+
+/* https://css-tricks.com/full-width-containers-limited-width-parents/ */
+.full-width {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+.no-top {
+  margin-top: 0px;
+  padding-top:0px;
+}
+</style>
+<style>/* Tomorrow Night Eighties Theme */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #999999;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+  color: #f2777a;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+  color: #f99157;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+  color: #ffcc66;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #99cc99;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+  color: #6699cc;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #cc99cc;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  background: #2d2d2d;
+  color: #cccccc;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+
+</head>
+<figure class="full-width no-top"><img src="worker.jpg"></figure><h1>Measure your code, or, Replicating columns in Matlab</h1><p><em>By <a href="/md-site#contact">Ahmed Fasih</a>. Updated on Tue, 31 May 2016 03:16:58 GMT, tagged with ‘tech’.</em></p><p>A colleague and I needed to optimize a bottleneck function in our Matlab code, which expanded a matrix in a specific way. This post contains three-ish implementations that we wound up comparing runtime:</p>
+<ol>
+<li>the initial code the colleague (a long-time Matlab and Python coder) had come up with,</li>
+<li>a stupid and simple approach I wrote to better understand what it was doing,</li>
+<li>a complicated approach that suggested itself after a few minutes of Thinking Hard, but that produced slightly wrong outputs, and</li>
+<li>a tweak on #3 with correct output.</li>
+</ol>
+<p>At this point, you’d think that #2 would be the slowest, then #1 (what we started out with), then #3 and/or #4.</p>
+<p>Let’s introduce our contestants.</p>
+<h2 id="problem-statement-and-stupid-simple-implementation">Problem statement and stupid-simple implementation</h2>
+<p>Given a 2D array with width <code>W</code>, and a <code>W</code>-long vector containing non-negative integers, expand the array by replicating each column as many times as specified in the vector.</p>
+<p>Here’s the stupid-simple implementation to confirm we understand what that means:</p>
+<pre class="matlab"><code class="hljs"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">M</span> = <span class="hljs-title">stupidSimple</span><span class="hljs-params">(P, reps)</span></span>
+  M = [];
+  <span class="hljs-keyword">for</span> colIdx = <span class="hljs-number">1</span> : <span class="hljs-built_in">length</span>(reps)
+    M = [M repmat(P(:, colIdx), <span class="hljs-number">1</span>, reps(colIdx))];
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></code></pre>
+<p>It’s stupid-simple because it’s expanding the output array at each iteration across the input array—reallocation nightmare! And <code>repmat</code>, isn’t that usually slow?</p>
+<h2 id="the-original-code-a-good-first-effort">The original code: a good first effort?</h2>
+<p>My colleague, no fool, knew reallocating each iteration was bad—it’s a warning in the Matlab linter! Said colleague knew all about <em>index arrays</em>, and about <code>arrayfun</code>, so used the latter to create one big index array <code>i</code>:</p>
+<pre class="matlab"><code class="hljs"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">M</span> = <span class="hljs-title">initialAttempt</span><span class="hljs-params">(P, reps)</span></span>
+  c = arrayfun(@(n, <span class="hljs-built_in">i</span>) <span class="hljs-built_in">i</span> * <span class="hljs-built_in">ones</span>(n, <span class="hljs-number">1</span>), reps, <span class="hljs-number">1</span> : <span class="hljs-built_in">length</span>(reps), <span class="hljs-string">'un'</span>, <span class="hljs-number">0</span>);
+  <span class="hljs-built_in">i</span> = cell2mat(c(:));
+  M = P(:, <span class="hljs-built_in">i</span>);
+<span class="hljs-keyword">end</span></code></pre>
+<p>(Matlab, Numpy/Python, Julia, all have this nice aspect to their array domain-specific language: you can index into an array with another <em>index array</em> to get a subset of slices of the array. If <code>x = [10 20 30]</code>, then <code>x([3 3 1 2])</code> is <code>[30 30 10 20]</code>. That’s what this code is using.)</p>
+<p>This was causing the bottleneck in your Bayesian estimation problem? Hmmm…</p>
+<h2 id="stroke-of-lucki-mean-flash-of-genius">Stroke of luck—I mean, flash of genius!</h2>
+<p>I doodled with pen-and-paper for a bit, then spent more time typing something unreadable to confirm it worked, and it almost did! (It didn’t handle the case when a column needed to be replicated 0 times, i.e., deleted.)</p>
+<p>Here’s that something unreadable:</p>
+<pre class="matlab"><code class="hljs"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">M</span> = <span class="hljs-title">sparseSumZeroBad</span><span class="hljs-params">(P, reps)</span></span>
+  widthM = sum(reps);
+  z = <span class="hljs-built_in">zeros</span>(widthM, <span class="hljs-number">1</span>); <span class="hljs-comment">% vector to be cumsummed</span>
+
+  <span class="hljs-comment">% indexes of z to be 1 (otherwise z is 0)</span>
+  <span class="hljs-built_in">j</span> = [<span class="hljs-number">1</span> <span class="hljs-number">1</span> + cumsum(reps(<span class="hljs-number">1</span> : end - <span class="hljs-number">1</span>))]; <span class="hljs-comment">% 🌶 pixie dust</span>
+
+  z(<span class="hljs-built_in">j</span>) = <span class="hljs-number">1</span>;
+  <span class="hljs-built_in">i</span> = cumsum(z);
+  M = P(:, <span class="hljs-built_in">i</span>);
+<span class="hljs-keyword">end</span></code></pre>
+<p>The core insight is that we can use <code>cumsum</code> (cumulative sum, prefix sum, etc.) to build the index array <code>i</code> efficiently. That is—if <code>reps = [4 2 3]</code>, then index array <code>i = [1 1 1 1 2 2 3 3 3]</code>, i.e., four 1s, two 2s, three 3s (confusing choice of example now, but made sense then). The code above is a way of <em>quickly</em> generating such an <code>i</code> index array by <code>cumsum</code>-ing a sparse binary array, specifically, <code>z = [1 0 0 0 1 0 1 0 0]</code>.</p>
+<p>What took a while to type up was getting those magic numbers in 🌶 to work above. 🌶 above decides where to put the ones in the sparse array.</p>
+<p>How did I come up with the correct offsets and indexes in 🌶? Formal reasoning? Rigorous analysis? Logical proof? I confess: I just wrote the code to work for the example I’d doodled, <code>reps = [4 2 3]</code>, and it turned out to work for the general case.</p>
+<p>I do this a lot and I assumed everyone else did it to: code something by making it work for one specific example that I can visualize, then test to see if it works for the general case. It’s not at all easy to explain or prove to someone why it works. It’s, let’s say, the test-driven development (TDD) approach to numerical computing. It’s been working for me so far.</p>
+<h2 id="tweak">Tweak</h2>
+<p><code>sparseSumZeroBad</code> doesn’t correctly handle the case when <code>reps</code> contains 0, i.e., where columns can be deleted, so with some more 🌶s, I tweaked it to get <code>sparseSum</code>—you can <a href="test.m">read it here</a>, but it works, all three-ish functions produce the right answer, and we’re approaching the moral of the story: measurement.</p>
+<h2 id="you-must-measure-everything">“You must measure everything”</h2>
+<p>I must quote the great Andrei Alexandrescu, the C++ and D author (of books and the programming languages), from his talk, “Writing Quick Code in C++, Quickly” at GoingNative 2013 (<a href="https://www.youtube.com/watch?v=ea5DiCg8HOY&amp;feature=youtu.be&amp;t=5m32s">Youtube</a>):</p>
+<blockquote>
+<p>You must measure everything. We all have intuition. And the intuition of programmers is … always wrong. Outdated. Intuition ignores a lot of aspects of a complex reality. Today’s machine architectures are so complicated, there’re so many variables in flight at any point in time that it’s essentially impossible to consider them deterministic machines any more. They are not deterministic any more. <strong>So we make very often big mistakes when assuming things about what’s going to make fast code.</strong> [E.g.,] fewer instructions ≠ faster code. Data [access] is not always faster than computation. The only good intuition is “I should measure this stuff and see what happens.”</p>
+<p>To quote a classic, who is still alive: Walter Bight: “Measuring gives you a leg up on experts who are so good they don’t need to measure.” Walter and I have been working on optimizing bits and pieces of a project we work on [the D programming language] and … <strong><em>whenever we think we know what we’re doing, we measure, and it’s just the other way around.</em></strong></p>
+</blockquote>
+<p>Programmers might be the first profession to <em>viscerally</em> believe and appreciate Duncan Watts when he says that complex systems are ill-served by our common sense evolved to navigate your everyday social life. His book, <a href="http://everythingisobvious.com/the-book/"><em>Everything is Obvious—Once You Know the Answer</em></a> is likely my favorite book, reigning champion for several years now. We get to <em>regularly</em> experience our straightforward and reasonable—oh so reasonable—beliefs going kaput in the face of a the complicated interactions between registers, multiple layers of cache, RAM, swap, and network.</p>
+<p>And if you’re not the kind of programmer who optimizes cycles, take it from Andrei and Walter when they say “whenever we think we know what we’re doing, we measure, and it’s just the other way around”.</p>
+<p>Further reading: Emil Ernerfeldt’s <a href="http://www.ilikebigbits.com/blog/2014/4/21/the-myth-of-ram-part-i">“The Myth of RAM, part I”</a>. His <code>ram_bench</code>, on (1) my mid-2014 MacBook Pro with 16 GB RAM as well as (2) a $10’000 workstation with dual-socket Xeons and 384 GB RAM:</p>
+<figure>
+<a href="bench.svg"><img src="bench.svg" alt="ram_bench on laptop and a powerful node."></a>
+<figcaption>
+ram_bench on laptop and a powerful node.
+</figcaption>
+</figure>
+<p>(<a href="https://gist.github.com/fasiha/d8b5eae8431dffb3ee14f41f167a6a2a">Raw data available</a>.) Those jumps basically mean the runtime to chew linearly through an <code>N</code>-element array might be the <em>same</em> as <code>10 * N</code> elements 😳! Meanwhile, the runtime might jump ten-fold when the input size doubles 😱! Gadzooks!</p>
+<p>Even further reading: Igor Ostrovsky’s <a href="http://igoro.com/archive/fast-and-slow-if-statements-branch-prediction-in-modern-processors/">“Fast and slow if-statements: branch prediction in modern processors”</a> on another esoteric reason for fast and slow code (and his <a href="http://igoro.com/archive/gallery-of-processor-cache-effects/">“Gallery of Processor Cache Effects”</a> is a nice recap of Emil Ernerfeldt’s piece). And I rather enjoyed Chad Austin’s notes on squeezing even reasonable performance out of modern CPUs in <a href="https://chadaustin.me/2017/05/writing-a-really-really-fast-json-parser/">“Writing a Really, Really Fast JSON Parser”</a>.</p>
+<p>Further watching: Cliff Click, formerly of Azul Systems (where they make thousand-core JVM boxes), has a great talk called “A crash course in modern hardware” (2013, on <a href="https://www.infoq.com/presentations/click-crash-course-modern-hardware">InofQ</a> and <a href="https://www.youtube.com/watch?v=OyTA5EaAb3Y">Youtube</a>) where he walks through a precise timeline of a cache miss.</p>
+<h2 id="speed-test">Speed test</h2>
+<p>So. Mid-2014 MacBook Pro, Matlab R2016a. In a test harness, expanding each column of a 10×1000 input array between 0 and 39 times,</p>
+<ul>
+<li>the initial code written by colleague came in at 5.1 milliseconds.</li>
+<li>The stupidly-simple reallocate-every-iteration approach aiming at clarity: <em>1.7×</em> <strong>faster</strong>.</li>
+<li>The spicy-🌶 using <code>cumsum</code> (slightly wrong): <strong>15× faster</strong>.</li>
+<li>The 🌶🌶🌶 tweak on the above, to be absolutely correct: <strong>9.9× faster</strong>.</li>
+</ul>
+<p>Lesson 1, for all programmers: reallocating might be fine, even the Matlab linter can’t break Alexandrescu’s Dictum. “You must measure everything.”</p>
+<p>Lesson 2, for my numerical colleagues: when working through the nitty-gritty indexing-and-shifting details of an implementation, formal analysis is <em>always</em> good, but try getting it to work on one example and tweak till it works for the general case.</p>
+<p>(Banner credit: Lewis Hine’s <em>Photograph of a Workman on the Framework of the Empire State Building</em>, 1930. <a href="https://catalog.archives.gov/id/518290">United States National Archives</a>. <a href="https://commons.wikimedia.org/wiki/File:Old_timer_structural_worker2.jpg">Wikimedia</a>.)</p>
+<p>
+<small>Previous: <a href="/md-site/post/texshade/">Texture-shaded globes</a><br>Next: <a href="/md-site/post/spherical-cap/">Random points on a spherical cap</a></small>
+</p>
