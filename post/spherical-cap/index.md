@@ -6,7 +6,7 @@ banner: 'jupiter-aurora.jpg'
 tags: ["math", "tech"]
 ---
 
-**tl;dr** [JavaScript](https://github.com/fasiha/sphere-cap-random) (and [Matlab](https://stackoverflow.com/a/39003745/500207)) library to draw random samples from arbitrary spherical caps.
+**tl;dr** [JavaScript](https://github.com/fasiha/sphere-cap-random) library ([npm](https://www.npmjs.com/package/sphere-cap-random), and [Matlab function](https://stackoverflow.com/a/39003745/500207)) to draw random samples from arbitrary spherical caps.
 
 <figure><div id="divPlot"></div>
 <figcaption>Interactive 3D scatterplot of samples from three spherical caps. [Screenshot](screenshot.png)</figcaption>
