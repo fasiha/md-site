@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://fasiha.github.io/md-site</id>
+    <title>Insight≠Numbers</title>
+    <updated>2017-05-21T13:33:34Z</updated>
+    <generator>Feed for Node.js</generator>
+    <author>
+        <name>Ahmed Fasih</name>
+        <uri>https://fasiha.github.io/md-site/#contact</uri>
+    </author>
+    <link rel="alternate" href="https://fasiha.github.io/md-site"/>
+    <subtitle>A blog by Ahmed Fasih</subtitle>
+    <logo>https://fasiha.github.io/md-site/glen-helen.jpg</logo>
+    <rights>Unless otherwise noted, released into the public domain under CC0.</rights>
+    <category term="study">
+    </category>
+    <category term="modernity">
+    </category>
+    <category term="tech">
+    </category>
+    <category term="math">
+    </category>
+    <category term="history">
+    </category>
+    <entry>
+        <title type="html"><![CDATA[Japanese study books]]></title>
+        <id>https://fasiha.github.io/md-site/post/japanese-study-books/</id>
+        <link href="https://fasiha.github.io/md-site/post/japanese-study-books/">
+        </link>
+        <updated>2017-05-21T13:33:34Z</updated>
+        <summary type="html"><![CDATA[Regular books, written by people, to help study Japanese.]]></summary>
+        <author>
+            <name>Ahmed Fasih</name>
+            <uri>https://fasiha.github.io/md-site/#contact</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Co-housing]]></title>
+        <id>https://fasiha.github.io/md-site/post/co-housing/</id>
+        <link href="https://fasiha.github.io/md-site/post/co-housing/">
+        </link>
+        <updated>2017-05-06T15:10:51Z</updated>
+        <summary type="html"><![CDATA[Some notes on co-housing.]]></summary>
+        <author>
+            <name>Ahmed Fasih</name>
+            <uri>https://fasiha.github.io/md-site/#contact</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Announcing: Ebisu and Ebisu.js]]></title>
+        <id>https://fasiha.github.io/md-site/post/ebisu/</id>
+        <link href="https://fasiha.github.io/md-site/post/ebisu/">
+        </link>
+        <updated>2017-04-28T08:48:19Z</updated>
+        <summary type="html"><![CDATA[Ebisu: intelligent quiz scheduling!]]></summary>
+        <author>
+            <name>Ahmed Fasih</name>
+            <uri>https://fasiha.github.io/md-site/#contact</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Announcing: KanjiBreak]]></title>
+        <id>https://fasiha.github.io/md-site/post/kanjibreak/</id>
+        <link href="https://fasiha.github.io/md-site/post/kanjibreak/">
+        </link>
+        <updated>2017-02-21T06:03:22Z</updated>
+        <summary type="html"><![CDATA[KanjiBreak: collaboratively create kanji character breakdowns!]]></summary>
+        <author>
+            <name>Ahmed Fasih</name>
+            <uri>https://fasiha.github.io/md-site/#contact</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[How Rust slays brittle indexing logic.]]></title>
+        <id>https://fasiha.github.io/md-site/post/rust-slays-brittle-indexing/</id>
+        <link href="https://fasiha.github.io/md-site/post/rust-slays-brittle-indexing/">
+        </link>
+        <updated>2017-01-05T14:52:39Z</updated>
+        <summary type="html"><![CDATA[A newbie’s response to Steve Klabnik’s question: what does Rust solve for me?]]></summary>
+        <author>
+            <name>Ahmed Fasih</name>
+            <uri>https://fasiha.github.io/md-site/#contact</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Conditional probability and the criterion of dissimilarity]]></title>
+        <id>https://fasiha.github.io/md-site/post/dissimilarity/</id>
+        <link href="https://fasiha.github.io/md-site/post/dissimilarity/">
+        </link>
+        <updated>2016-10-22T04:40:30Z</updated>
+        <summary type="html"><![CDATA[Biblical criticism and Bayes theorem. What could go wrong?]]></summary>
+        <author>
+            <name>Ahmed Fasih</name>
+            <uri>https://fasiha.github.io/md-site/#contact</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Make Ruby HTML tags]]></title>
+        <id>https://fasiha.github.io/md-site/post/ruby/</id>
+        <link href="https://fasiha.github.io/md-site/post/ruby/">
+        </link>
+        <updated>2016-10-13T23:18:41Z</updated>
+        <summary type="html"><![CDATA[If you can’t remember “ruby” vs “rp” vs “rt”, you’re in luck.]]></summary>
+        <author>
+            <name>Ahmed Fasih</name>
+            <uri>https://fasiha.github.io/md-site/#contact</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Track planes with a USB dongle]]></title>
+        <id>https://fasiha.github.io/md-site/post/ads-b/</id>
+        <link href="https://fasiha.github.io/md-site/post/ads-b/">
+        </link>
+        <updated>2016-08-31T18:53:17Z</updated>
+        <summary type="html"><![CDATA[Instructions for getting real-time, local commercial and general aviation data with a RTL-SDR USB dongle and open-source software.]]></summary>
+        <author>
+            <name>Ahmed Fasih</name>
+            <uri>https://fasiha.github.io/md-site/#contact</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Random points on a spherical cap]]></title>
+        <id>https://fasiha.github.io/md-site/post/spherical-cap/</id>
+        <link href="https://fasiha.github.io/md-site/post/spherical-cap/">
+        </link>
+        <updated>2016-08-19T04:59:34Z</updated>
+        <summary type="html"><![CDATA[An adventure in ES2015, spherical caps, and random sampling.]]></summary>
+        <author>
+            <name>Ahmed Fasih</name>
+            <uri>https://fasiha.github.io/md-site/#contact</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Measure your code, or, Replicating columns in Matlab]]></title>
+        <id>https://fasiha.github.io/md-site/post/replicating-matlab-columns/</id>
+        <link href="https://fasiha.github.io/md-site/post/replicating-matlab-columns/">
+        </link>
+        <updated>2016-05-31T03:16:58Z</updated>
+        <summary type="html"><![CDATA[Three-ish implementations of an array slicing-and-dicing problem… in Matlab.]]></summary>
+        <author>
+            <name>Ahmed Fasih</name>
+            <uri>https://fasiha.github.io/md-site/#contact</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Texture-shaded globes]]></title>
+        <id>https://fasiha.github.io/md-site/post/texshade/</id>
+        <link href="https://fasiha.github.io/md-site/post/texshade/">
+        </link>
+        <updated>2015-12-14T04:08:00Z</updated>
+        <summary type="html"><![CDATA[Texture-shading: you’ve never seen terrain like this before!]]></summary>
+        <author>
+            <name>Ahmed Fasih</name>
+            <uri>https://fasiha.github.io/md-site/#contact</uri>
+        </author>
+    </entry>
+</feed>

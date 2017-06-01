@@ -9,7 +9,12 @@ var yaml = require('js-yaml');
 var find = require('find');
 var spawnSync = require('child_process').spawnSync;
 
+var URL = 'https://fasiha.github.io';
 var PREPATH = 'md-site'; // i.e., if site lives at foo.edu/~me, RELPATH='~me'.
+function filepathToAbspath(filepath) {
+  return path.resolve('/', PREPATH, filepath).replace(/index.html$/, '');
+}
+function filepathToURL(filepath) { return URL + filepathToAbspath(filepath); }
 
 var css =
     '<style>' + fs.readFileSync('assets/modest.css', 'utf8') + '</style>\n';
@@ -38,7 +43,7 @@ var defaultMeta = {
   title : 'Insight≠Numbers',
   description : 'A blog by Ahmed Fasih',
   date : new Date(),
-  dateUpdated : new Date(),
+  dateUpdated : null,
   banner : 'glen-helen.jpg',
   socialBanner : '',
   tags : [],
@@ -54,10 +59,14 @@ function gatherIntel(filepath) {
   articles.set(filepath, meta);
 }
 
+var Feed = require('feed');
+
 find.file(/\.md$/, '.', md => {
   md = md.filter(s => s.indexOf('node_modules') !== 0);
   md.forEach(gatherIntel);
-  var metas = Array.from(articles.values()).sort((a, b) => -(a.date - b.date));
+  var metas = Array.from(articles.values())
+                  .sort((a, b) => -((a.dateUpdated || a.date) -
+                                    (b.dateUpdated || b.date)));
 
   var postMetas = metas.filter(meta => meta.filepath.indexOf('post/') === 0);
   var nonpostMetas = metas.filter(meta => meta.filepath.indexOf('post/') !== 0);
@@ -71,6 +80,35 @@ find.file(/\.md$/, '.', md => {
   nonpostMetas.forEach((meta, midx) => {
     buildOneMarkdown(meta, null, null, postMetas, tagsToMetas);
   });
+
+  // Atom feed!
+  var feed = new Feed({
+    title : defaultMeta.title,
+    description : defaultMeta.description,
+    id : filepathToURL(''),
+    link : filepathToURL(''),
+    image : filepathToURL(defaultMeta.banner),
+    copyright :
+        'Unless otherwise noted, released into the public domain under CC0.',
+    updated : new Date(postMetas[0].dateUpdated || postMetas[0].date),
+    author : {name : defaultMeta.author, link : filepathToURL(`#contact`)}
+  });
+  postMetas.forEach(post => {
+    feed.addItem({
+      title : post.title,
+      id : filepathToURL(post.outfile),
+      link : filepathToURL(post.outfile),
+      description : post.description,
+      author : [
+        {name : post.author, link : `${filepathToURL('')}/#contact`},
+      ],
+      contributor : [],
+      date : post.dateUpdated || post.date,
+      image : post.socialBanner || post.banner
+    });
+  });
+  Object.keys(tagsToMetas).forEach(tag => feed.addCategory(tag));
+  fs.writeFileSync('atom.xml', feed.atom1());
 });
 
 // Build posts: have next/prev/tags + header
@@ -102,7 +140,10 @@ function buildOneMarkdown(meta, prevMeta, nextMeta, metas, tagsToMetas) {
   }
 
   var head = '<!doctype html>\n<head><meta charset="utf-8" />\n';
-  head += `<title>${meta.title}</title>\n`
+  head += `<title>${meta.title}</title>\n`;
+  head += `<link href="${
+                         filepathToAbspath('atom.xml')
+                       }" type="application/atom+xml" rel="alternate" />\n`;
   head += social(outfile, meta.title, meta.description,
                  meta.socialBanner || meta.banner);
   head += css;
@@ -118,11 +159,14 @@ function buildOneMarkdown(meta, prevMeta, nextMeta, metas, tagsToMetas) {
   head += '\n</head>\n';
 
   // HEAD DONE!!!
+  var ispost = prevMeta || nextMeta;
 
   head += meta.banner ? banner(meta.banner) : '';
+  if (ispost) {
+    head += topnav();
+  }
   head += headline(meta.title);
-  if (prevMeta || nextMeta) {
-    // Janky way to tell if this is a non-blog-post i.e., main or about
+  if (ispost) {
     head += subline(meta);
   }
   if (filepath === 'index.md') {
@@ -139,10 +183,6 @@ function buildOneMarkdown(meta, prevMeta, nextMeta, metas, tagsToMetas) {
   if (foothtml) {
     fs.appendFileSync(outfile, foothtml);
   }
-}
-
-function filepathToAbspath(filepath) {
-  return path.resolve('/', PREPATH, filepath).replace(/index.html$/, '');
 }
 
 function prevNextToFoot(prevMeta, nextMeta) {
@@ -215,10 +255,13 @@ function fileToMeta(filepath) {
   return meta;
 }
 
-function subline(meta) {
+function topnav(){return `  <ul class="top-nav">
+    <li><a href="${filepathToAbspath('')}">Blog</a></li>
+    <li><a href="${filepathToAbspath('#contact')}">Contact</a></li>
+    <li><a href="${filepathToAbspath('atom.xml')}">Feed</a></li>
+  </ul>`} function subline(meta) {
   var t = filepathToAbspath('');
-  var text = `By <a href="${t}#contact">${meta.author}</a>, `;
-  text += `on the <a href="${t}">Insight≠Numbers</a> blog. `;
+  var text = ``;
   var tagtext = meta.tags.map(s => `‘${s}’`).join('—');
   if (meta.date && (meta.tags && meta.tags.length)) {
     text += `Updated on ${meta.date.toUTCString()}, tagged with ${tagtext}.`;

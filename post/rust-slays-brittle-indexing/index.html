@@ -1,6 +1,7 @@
 <!doctype html>
 <head><meta charset="utf-8" />
 <title>How Rust slays brittle indexing logic.</title>
+<link href="/md-site/atom.xml" type="application/atom+xml" rel="alternate" />
 <meta name="description" content="A newbie’s response to Steve Klabnik’s question: what does Rust solve for me?" />
 <meta name="twitter:card" value="summary">
 <meta property="og:title" content="How Rust slays brittle indexing logic." />
@@ -243,6 +244,14 @@ figcaption {
   margin-top: 0px;
   padding-top:0px;
 }
+ul.top-nav {
+  padding-left: 0;
+}
+ul.top-nav li {
+  display: inline;
+  list-style-type: none;
+  padding-right: 1em;
+}
 </style>
 <style>/* Tomorrow Night Eighties Theme */
 /* Original theme - https://github.com/chriskempson/tomorrow-theme */
@@ -321,7 +330,11 @@ figcaption {
 </style>
 
 </head>
-<figure class="full-width no-top"><img src="hematite.jpg"></figure><h1>How Rust slays brittle indexing logic.</h1><p><em>By <a href="/md-site#contact">Ahmed Fasih</a>, on the <a href="/md-site">Insight≠Numbers</a> blog. Updated on Thu, 05 Jan 2017 14:52:39 GMT, tagged with ‘tech’.</em></p><p><em>(Originally posted on <a href="https://gist.github.com/fasiha/886302b75e480d4b4e4e31f3eba055bb">Gist</a>.)</em></p>
+<figure class="full-width no-top"><img src="hematite.jpg"></figure>  <ul class="top-nav">
+    <li><a href="/md-site">Blog</a></li>
+    <li><a href="/md-site/#contact">Contact</a></li>
+    <li><a href="/md-site/atom.xml">Feed</a></li>
+  </ul><h1>How Rust slays brittle indexing logic.</h1><p><em>Updated on Thu, 05 Jan 2017 14:52:39 GMT, tagged with ‘tech’.</em></p><p><em>(Originally posted on <a href="https://gist.github.com/fasiha/886302b75e480d4b4e4e31f3eba055bb">Gist</a>.)</em></p>
 <p>In writing one’s own <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding">Base64</a> codec for the <a href="https://cryptopals.com/sets/1/challenges/1">Cryptopals Crypto Challenge</a> in Rust (see my <a href="https://github.com/fasiha/rosetta-cryptopals">multilingual code here</a>!), one gets to a point where every chunk of <em>four</em> adjacent elements in an input vector has to be transformed into a chunk of <em>three</em> elements in an output vector.</p>
 <blockquote>
 <p>That is, the string <code>SSdt</code> containing four ASCII bytes becomes the string <code>I'm</code> containing three ASCII bytes, and <code>IGtp</code> becomes <code>&nbsp;ki</code>, and so on, so that <code>SSdt IGtp bGxp bmcg eW91 ciBi cmFp biBs aWtl IGEg cG9p c29u b3Vz IG11 c2hy b29t</code> is decoded to <code>I'm killing your brain like a poisonous mushroom</code>.</p>

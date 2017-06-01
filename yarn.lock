@@ -174,6 +174,12 @@ fast-levenshtein@~2.0.4:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
 
+feed@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/feed/-/feed-1.0.2.tgz#730e28d5835b9a40b3e3eee21f65e37486b7eadc"
+  dependencies:
+    xml ">= 0.0.5"
+
 find@^0.2.7:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/find/-/find-0.2.7.tgz#7afbd00f8f08c5b622f97cda6f714173d547bb3f"
@@ -554,3 +560,7 @@ wordwrap@~1.0.0:
 xml-name-validator@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-2.0.1.tgz#4d8b8f1eccd3419aa362061becef515e1e559635"
+
+"xml@>= 0.0.5":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/xml/-/xml-1.0.1.tgz#78ba72020029c5bc87b8a81a3cfcd74b4a2fc1e5"

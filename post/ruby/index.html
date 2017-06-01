@@ -1,6 +1,7 @@
 <!doctype html>
 <head><meta charset="utf-8" />
 <title>Make Ruby HTML tags</title>
+<link href="/md-site/atom.xml" type="application/atom+xml" rel="alternate" />
 <meta name="description" content="If you can’t remember “ruby” vs “rp” vs “rt”, you’re in luck." />
 <meta name="twitter:card" value="summary">
 <meta property="og:title" content="Make Ruby HTML tags" />
@@ -243,10 +244,22 @@ figcaption {
   margin-top: 0px;
   padding-top:0px;
 }
+ul.top-nav {
+  padding-left: 0;
+}
+ul.top-nav li {
+  display: inline;
+  list-style-type: none;
+  padding-right: 1em;
+}
 </style>
 
 </head>
-<figure class="full-width no-top"><img src="hiroshige.jpg"></figure><h1>Make Ruby HTML tags</h1><p><em>By <a href="/md-site#contact">Ahmed Fasih</a>, on the <a href="/md-site">Insight≠Numbers</a> blog. Updated on Thu, 13 Oct 2016 23:18:41 GMT, tagged with ‘tech’.</em></p><p>I <ruby>😍<rt>love</rt></ruby> Ruby characters—you know, HTML <code>&lt;ruby&gt;&lt;/ruby&gt;</code>, usually seen giving the reading of East Asian characters. I often forget the raw HTML, so here you go, self, you’re welcome:</p>
+<figure class="full-width no-top"><img src="hiroshige.jpg"></figure>  <ul class="top-nav">
+    <li><a href="/md-site">Blog</a></li>
+    <li><a href="/md-site/#contact">Contact</a></li>
+    <li><a href="/md-site/atom.xml">Feed</a></li>
+  </ul><h1>Make Ruby HTML tags</h1><p><em>Updated on Thu, 13 Oct 2016 23:18:41 GMT, tagged with ‘tech’.</em></p><p>I <ruby>😍<rt>love</rt></ruby> Ruby characters—you know, HTML <code>&lt;ruby&gt;&lt;/ruby&gt;</code>, usually seen giving the reading of East Asian characters. I often forget the raw HTML, so here you go, self, you’re welcome:</p>
 <p><strong>Base text</strong> <input oninput="process()" placeholder="学生" type="text" id="base"></p>
 <p><strong>Ruby text (annotation)</strong> <input oninput="process()" placeholder="がくせい" type="text" id="ruby"></p>
 <p><strong>Optional: parentheses</strong> <input oninput="process()" placeholder="[" type="text" id="left"> <input oninput="process()" placeholder="]" type="text" id="right"></p>
