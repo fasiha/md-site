@@ -216,8 +216,9 @@ function fileToMeta(filepath) {
 }
 
 function subline(meta) {
-  var text =
-      `By <a href="${filepathToAbspath('')}#contact">${meta.author}</a>. `;
+  var t = filepathToAbspath('');
+  var text = `By <a href="${t}#contact">${meta.author}</a>, `;
+  text += `on the <a href="${t}">Insight≠Numbers</a> blog. `;
   var tagtext = meta.tags.map(s => `‘${s}’`).join('—');
   if (meta.date && (meta.tags && meta.tags.length)) {
     text += `Updated on ${meta.date.toUTCString()}, tagged with ${tagtext}.`;

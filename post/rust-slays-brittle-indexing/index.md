@@ -10,7 +10,7 @@ tags: ["tech"]
 
 In writing one’s own [Base64](https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding) codec for the [Cryptopals Crypto Challenge](https://cryptopals.com/sets/1/challenges/1) in Rust (see my [multilingual code here](https://github.com/fasiha/rosetta-cryptopals)!), one gets to a point where every chunk of *four* adjacent elements in an input vector has to be transformed into a chunk of *three* elements in an output vector.
 
-> That is, the string `SSdt` containing four ASCII bytes becomes the string `I'm` containing three ASCII bytes, and `IGtp` becomes ` ki`, and so on, so that `SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t` is decoded to `I'm killing your brain like a poisonous mushroom`.
+> That is, the string `SSdt` containing four ASCII bytes becomes the string `I'm` containing three ASCII bytes, and `IGtp` becomes ` ki`, and so on, so that `SSdt IGtp bGxp bmcg eW91 ciBi cmFp biBs aWtl IGEg cG9p c29u b3Vz IG11 c2hy b29t` is decoded to `I'm killing your brain like a poisonous mushroom`.
 
 I had a function to do this four-to-three downconversion but looping over the two arrays, lining up the indexes, the keeping track of magic threes and magic fours in my code gave me a headache as I worked through writing the following:
 ```rust
