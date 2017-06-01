@@ -1,0 +1,334 @@
+<!doctype html>
+<head><meta charset="utf-8" />
+<title>A UTF-8 mini-refresher</title>
+<link href="/md-site/atom.xml" type="application/atom+xml" rel="alternate" />
+<meta name="description" content="Recalling some of the nitty-gritty details of UTF-8 decoding, with Rust sample code." />
+<meta name="twitter:card" value="summary">
+<meta property="og:title" content="A UTF-8 mini-refresher" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="post/utf8-refresher/index.html" />
+<meta property="og:image" content="linear-b.jpg" />
+<meta property="og:description" content="Recalling some of the nitty-gritty details of UTF-8 decoding, with Rust sample code." />
+<style>@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+  .parallax {
+    background-attachment: scroll;
+  }
+}
+
+pre,
+code {
+  font-family: Menlo, Monaco, Consolas, Inconsolata, "Andale Mono", "Fira Code", "Lucida Console", "Lucida Sans Typewriter", "Courier New", monospace;
+}
+
+pre {
+  padding: .5rem;
+  line-height: 1.25;
+  overflow-x: scroll;
+}
+
+a,
+a:visited {
+  color: #3498db;
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: #2980b9;
+}
+
+.modest-no-decoration {
+  text-decoration: none;
+}
+
+html {
+  font-size: 12px;
+}
+
+@media screen and (min-width: 32rem) and (max-width: 48rem) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 48rem) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  line-height: 1.85;
+}
+
+p,
+.modest-p {
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
+}
+
+h1,
+.modest-h1,
+h2,
+.modest-h2,
+h3,
+.modest-h3,
+h4,
+.modest-h4 {
+  margin: 1.414rem 0 .5rem;
+  font-weight: inherit;
+  line-height: 1.42;
+}
+
+h1,
+.modest-h1 {
+  margin-top: 0;
+  font-size: 3.998rem;
+}
+
+h2,
+.modest-h2 {
+  font-size: 2.827rem;
+}
+
+h3,
+.modest-h3 {
+  font-size: 1.999rem;
+}
+
+h4,
+.modest-h4 {
+  font-size: 1.414rem;
+}
+
+h5,
+.modest-h5 {
+  font-size: 1.121rem;
+}
+
+h6,
+.modest-h6 {
+  font-size: .88rem;
+}
+
+small,
+.modest-small {
+  font-size: .707em;
+}
+
+/* https://github.com/mrmrs/fluidity */
+
+img,
+canvas,
+iframe,
+video,
+svg,
+select,
+textarea {
+  max-width: 100%;
+}
+
+html {
+  font-size: 18px;
+  max-width: 100%;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  color: #444;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  margin: 0 auto;
+  max-width: 48rem;
+  line-height: 1.45;
+  padding: 0 .25rem .25rem;
+}
+
+h1,
+h2,
+h3 {
+  border-bottom: 2px solid #fafafa;
+  margin-bottom: 1.15rem;
+  padding-bottom: .5rem;
+  text-align: center;
+}
+
+blockquote {
+  border-left: 8px solid #fafafa;
+  padding: 1rem;
+}
+
+pre,
+code {
+  background-color: #fafafa;
+}
+
+figure {
+  position: relative;
+  text-align: center;
+}
+figcaption {
+  color: #999;
+  font-size: 0.9em;
+  margin-top: 0.5em;
+}
+
+/* https://css-tricks.com/full-width-containers-limited-width-parents/ */
+.full-width {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+.no-top {
+  margin-top: 0px;
+  padding-top:0px;
+}
+ul.top-nav {
+  padding-left: 0;
+}
+ul.top-nav li {
+  display: inline;
+  list-style-type: none;
+  padding-right: 1em;
+}
+table{
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+table th, table td{
+  border: 1px solid #eee;
+  padding: 6px 13px;
+}
+table tr:nth-child(2n) {
+  background-color: #f6f8f6;
+}
+</style>
+
+</head>
+<figure class="full-width no-top"><img src="linear-b.jpg"></figure>  <ul class="top-nav">
+    <li><a href="/md-site">Blog</a></li>
+    <li><a href="/md-site/#contact">Contact</a></li>
+    <li><a href="/md-site/atom.xml">Feed</a></li>
+  </ul><h1>A UTF-8 mini-refresher</h1><p><em>Updated on Fri, 30 Dec 2016 01:08:29 GMT, tagged with ‘tech’.</em></p><p>Aficionados of information theory will recognize UTF-8 as a self-synchronizing prefix-free code—where “code” means a way to encode letters of an alphabet with bits. The alphabet consists of the tens of thousands of Unicode code points, or symbols, each of which is a “letter” in this alphabet.</p>
+<p>Going off of <a href="http://stackoverflow.com/a/1543616/500207">this highly-voted StackOverflow answer</a> and the <a href="http://blog.kevinalbs.com/base122">Base-122</a> writeup, here’s how UTF-8 works. If the first half-byte of a byte (the first hexadecimal digit) is:</p>
+<ul>
+<li>between 0x0 and 0x7, this byte encodes a one-byte code point (ASCII). Seven bits are used for the actual code point, which can be between U+0 and U+7F.</li>
+<li>0xC or 0xD (12 or 13), this is the start of a two-byte code point. 5+6 or eleven bits (of sixteen) are used for the actual code point, which lives in [U+080, U+7FF].</li>
+<li>0xE (14), this is the start of a three-byte code point. 4+6+6 or sixteen bits (of twenty-four) are used for the actual code point, which lives in [U+800, U+FFFF].</li>
+<li>0xF (15) and the <em>second</em> half-byte is ≤0x7, this is the start of a four-byte code point. 3+6+6+6 or twenty-one bits (of thirty-two) are used for the actual code point, which lives in [U+10000, U+10FFFF].</li>
+</ul>
+<p>(In the above, whenever I’ve said, e.g., “3+6+6+6” bits, each of those numbers represent how many bits of each byte combine to yield the code point. And those bits are from the least significant end—the most significant bits of each byte is taken up by a prelude.)</p>
+<p>So, for example:</p>
+<table>
+<thead>
+<tr class="header">
+<th>character</th>
+<th>UTF-8 bytes</th>
+<th>Unicode code point</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>x</td>
+<td>78</td>
+<td>\U{<a href="http://www.fileformat.info/info/unicode/char/0078/index.htm">78</a>}</td>
+</tr>
+<tr class="even">
+<td>Å</td>
+<td>C3 85</td>
+<td>\U{<a href="http://www.fileformat.info/info/unicode/char/00C5/index.htm">C5</a>}</td>
+</tr>
+<tr class="odd">
+<td>月</td>
+<td>E6 9C 88</td>
+<td>\U{<a href="http://www.fileformat.info/info/unicode/char/6708/index.htm">6708</a>}</td>
+</tr>
+<tr class="even">
+<td>😊</td>
+<td>F0 9F 98 8A</td>
+<td>\U{<a href="http://www.fileformat.info/info/unicode/char/1F60A/index.htm">1F60A</a>}</td>
+</tr>
+<tr class="odd">
+<td>Ā̂</td>
+<td>C4 80 CC 82</td>
+<td>\U{<a href="http://www.fileformat.info/info/unicode/char/0100/index.htm">100</a>}\U{<a href="http://www.fileformat.info/info/unicode/char/0302/index.htm">302</a>}</td>
+</tr>
+<tr class="even">
+<td>👍</td>
+<td>F0 9F 91 8D</td>
+<td>\U{<a href="http://www.fileformat.info/info/unicode/char/1F44D/index.htm">1F44D</a>}</td>
+</tr>
+<tr class="odd">
+<td>👍🏽️</td>
+<td>F0 9F 91 8D F0 9F 8F BD EF B8 8F</td>
+<td>\U{<a href="http://www.fileformat.info/info/unicode/char/1F44D/index.htm">1F44D</a>}\U{<a href="http://www.fileformat.info/info/unicode/char/1F3FD/index.htm">1F3FD</a>}\U{<a href="http://www.fileformat.info/info/unicode/char/FE0F/index.htm">FE0F</a>}</td>
+</tr>
+</tbody>
+</table>
+<p>(Experiment with the code that generated this at the <a href="https://is.gd/YUiDHj">Rust Playground</a>!)</p>
+<p>The first four rows show examples of code points that, in UTF-8, take up 1–4 bytes. The rest show that Unicode is more complicated than can be expressed in this gist 😜.</p>
+<p>(Banner credit: Jeremy Keith, <em>Linear B</em>, tablet at Oxford’s Ashmolean Museum, London, England. <a href="https://www.flickr.com/photos/adactio/26567747536">Flickr</a>.)</p>
+<p>
+<small>Previous: <a href="/md-site/post/dissimilarity/">Conditional probability and the criterion of dissimilarity</a><br>Next: <a href="/md-site/post/rust-slays-brittle-indexing/">How Rust slays brittle indexing logic.</a></small>
+</p>

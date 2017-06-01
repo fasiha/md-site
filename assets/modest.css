@@ -241,3 +241,14 @@ ul.top-nav li {
   list-style-type: none;
   padding-right: 1em;
 }
+table{
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+table th, table td{
+  border: 1px solid #eee;
+  padding: 6px 13px;
+}
+table tr:nth-child(2n) {
+  background-color: #f6f8f6;
+}

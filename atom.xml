@@ -83,6 +83,18 @@
         </author>
     </entry>
     <entry>
+        <title type="html"><![CDATA[A UTF-8 mini-refresher]]></title>
+        <id>https://fasiha.github.io/md-site/post/utf8-refresher/</id>
+        <link href="https://fasiha.github.io/md-site/post/utf8-refresher/">
+        </link>
+        <updated>2016-12-30T01:08:29Z</updated>
+        <summary type="html"><![CDATA[Recalling some of the nitty-gritty details of UTF-8 decoding, with Rust sample code.]]></summary>
+        <author>
+            <name>Ahmed Fasih</name>
+            <uri>https://fasiha.github.io/md-site/#contact</uri>
+        </author>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[Conditional probability and the criterion of dissimilarity]]></title>
         <id>https://fasiha.github.io/md-site/post/dissimilarity/</id>
         <link href="https://fasiha.github.io/md-site/post/dissimilarity/">
