@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://fasiha.github.io/md-site</id>
     <title>Insight≠Numbers</title>
-    <updated>2017-05-21T13:33:34Z</updated>
+    <updated>2017-06-01T06:17:23Z</updated>
     <generator>Feed for Node.js</generator>
     <author>
         <name>Ahmed Fasih</name>
@@ -12,16 +12,28 @@
     <subtitle>A blog by Ahmed Fasih</subtitle>
     <logo>https://fasiha.github.io/md-site/glen-helen.jpg</logo>
     <rights>Unless otherwise noted, released into the public domain under CC0.</rights>
-    <category term="study">
-    </category>
-    <category term="modernity">
-    </category>
-    <category term="tech">
+    <category term="history">
     </category>
     <category term="math">
     </category>
-    <category term="history">
+    <category term="modernity">
     </category>
+    <category term="study">
+    </category>
+    <category term="tech">
+    </category>
+    <entry>
+        <title type="html"><![CDATA[Announcing: Mudder.js]]></title>
+        <id>https://fasiha.github.io/md-site/post/mudder/</id>
+        <link href="https://fasiha.github.io/md-site/post/mudder/">
+        </link>
+        <updated>2017-06-01T06:17:23Z</updated>
+        <summary type="html"><![CDATA[Generate lexicographically-spaced strings. And for fun, encode numbers in arbitrary-base number systems.]]></summary>
+        <author>
+            <name>Ahmed Fasih</name>
+            <uri>https://fasiha.github.io/md-site/#contact</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Japanese study books]]></title>
         <id>https://fasiha.github.io/md-site/post/japanese-study-books/</id>

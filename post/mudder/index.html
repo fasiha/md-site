@@ -1,0 +1,389 @@
+<!doctype html>
+<head><meta charset="utf-8" />
+<title>Announcing: Mudder.js</title>
+<link href="/md-site/atom.xml" type="application/atom+xml" rel="alternate" />
+<meta name="description" content="Generate lexicographically-spaced strings. And for fun, encode numbers in arbitrary-base number systems." />
+<meta name="twitter:card" value="summary">
+<meta property="og:title" content="Announcing: Mudder.js" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="post/mudder/index.html" />
+<meta property="og:image" content="flame.jpg" />
+<meta property="og:description" content="Generate lexicographically-spaced strings. And for fun, encode numbers in arbitrary-base number systems." />
+<style>@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+  .parallax {
+    background-attachment: scroll;
+  }
+}
+
+pre,
+code {
+  font-family: Menlo, Monaco, Consolas, Inconsolata, "Andale Mono", "Fira Code", "Lucida Console", "Lucida Sans Typewriter", "Courier New", monospace;
+}
+
+pre {
+  padding: .5rem;
+  line-height: 1.25;
+  overflow-x: scroll;
+}
+
+a,
+a:visited {
+  color: #3498db;
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: #2980b9;
+}
+
+.modest-no-decoration {
+  text-decoration: none;
+}
+
+html {
+  font-size: 12px;
+}
+
+@media screen and (min-width: 32rem) and (max-width: 48rem) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 48rem) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  line-height: 1.85;
+}
+
+p,
+.modest-p {
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
+}
+
+h1,
+.modest-h1,
+h2,
+.modest-h2,
+h3,
+.modest-h3,
+h4,
+.modest-h4 {
+  margin: 1.414rem 0 .5rem;
+  font-weight: inherit;
+  line-height: 1.42;
+}
+
+h1,
+.modest-h1 {
+  margin-top: 0;
+  font-size: 3.998rem;
+}
+
+h2,
+.modest-h2 {
+  font-size: 2.827rem;
+}
+
+h3,
+.modest-h3 {
+  font-size: 1.999rem;
+}
+
+h4,
+.modest-h4 {
+  font-size: 1.414rem;
+}
+
+h5,
+.modest-h5 {
+  font-size: 1.121rem;
+}
+
+h6,
+.modest-h6 {
+  font-size: .88rem;
+}
+
+small,
+.modest-small {
+  font-size: .707em;
+}
+
+/* https://github.com/mrmrs/fluidity */
+
+img,
+canvas,
+iframe,
+video,
+svg,
+select,
+textarea {
+  max-width: 100%;
+}
+
+html {
+  font-size: 18px;
+  max-width: 100%;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  color: #444;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  margin: 0 auto;
+  max-width: 48rem;
+  line-height: 1.45;
+  padding: 0 .25rem .25rem;
+}
+
+h1,
+h2,
+h3 {
+  border-bottom: 2px solid #fafafa;
+  margin-bottom: 1.15rem;
+  padding-bottom: .5rem;
+  text-align: center;
+}
+
+blockquote {
+  border-left: 8px solid #fafafa;
+  padding: 1rem;
+}
+
+pre,
+code {
+  background-color: #fafafa;
+}
+
+figure {
+  position: relative;
+  text-align: center;
+}
+figcaption {
+  color: #999;
+  font-size: 0.9em;
+  margin-top: 0.5em;
+}
+
+/* https://css-tricks.com/full-width-containers-limited-width-parents/ */
+.full-width {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+.no-top {
+  margin-top: 0px;
+  padding-top:0px;
+}
+ul.top-nav {
+  padding-left: 0;
+}
+ul.top-nav li {
+  display: inline;
+  list-style-type: none;
+  padding-right: 1em;
+}
+table{
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+table th, table td{
+  border: 1px solid #eee;
+  padding: 6px 13px;
+}
+table tr:nth-child(2n) {
+  background-color: #f6f8f6;
+}
+</style>
+<style>/* Tomorrow Night Eighties Theme */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #999999;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+  color: #f2777a;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+  color: #f99157;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+  color: #ffcc66;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #99cc99;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+  color: #6699cc;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #cc99cc;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  background: #2d2d2d;
+  color: #cccccc;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+
+</head>
+<figure class="full-width no-top"><img src="flame.jpg"></figure>  <ul class="top-nav">
+    <li><a href="/md-site">Blog</a></li>
+    <li><a href="/md-site/#contact">Contact</a></li>
+    <li><a href="/md-site/atom.xml">Feed</a></li>
+  </ul><h1>Announcing: Mudder.js</h1><p><em>Updated on Thu, 01 Jun 2017 06:17:23 GMT, tagged with ‘tech’—‘math’.</em></p><p><em>(This post started as a “Work In Progress”-kind of post, but writing out apologies for why it wasn’t finished pushed me to publish it.)</em></p>
+<p>I’m happy to announce the publication of a fun, potentially even useful, library I worked on over September 2016.</p>
+<p><a href="https://github.com/fasiha/mudderjs"><strong>Mudder.js</strong></a> is a JavaScript library that lets you create lexicographically-evenly-spaced strings. That is, you can ask for the ten strings that lexicographically sort between two input strings.</p>
+<p>As a fun bonus, it simplifies converting between JavaScript numbers and their stringy representations in arbitrary bases (non-base-ten) and using arbitrary symbols.</p>
+<p><strong>Fun</strong> First things first. We can specify a base-214 number system that uses the 214 Kangxi radicals used by the Chinese to organize Chinese characters, i.e., 0 through 20 is 一丨丶丿乙亅二亠人儿入八冂冖冫几凵刀力勹匕. One billion is 疋亠鼠尢 in this number system, while one-billion-plus-one is 疋亠鼠尸. Confucius’ name is written <ruby>孔<rt>kǒng</rt></ruby><ruby>子<rt>zǐ</rt></ruby> and consists of the radicals 子乚子, which in this Kangxi number system is 8170—maybe that has some cosmic significance?</p>
+<p><strong>Business</strong> This numerology actually was an unexpected stepping stone to a more serious use. In NoSQL databases like CouchDB or Redis, entries are indexed by stringy keys and I needed a way to reliably insert, delete, and reorder entries to maintain an external ordering without knowing ahead of time how many entries or how they would be ordered. Mudder.js makes it easy to ask for three strings that are lexicographically between, say, 'anhui' and 'azazel', using only the 26 lower-case letters:</p>
+<pre class="js"><code class="hljs javascript"><span class="hljs-built_in">console</span>.log(mudder.alphabet.mudder(<span class="hljs-string">'anhui'</span>, <span class="hljs-string">'azazel'</span>, <span class="hljs-number">3</span>))
+<span class="hljs-comment">// [ 'aq', 'at', 'aw' ]</span></code></pre>
+<p>With Mudder.js, I can always call <code>mudder</code> (i.e., “midder”) to get one or more strings lexicographically between any two stringy keys. Feel free to edit the code above—the results should update instantaneously thanks to the magical <a href="http://blog.klipse.tech/klipse/2017/03/28/klipse-explained.html">Klipse</a> plugin.</p>
+<p>(I’ve been referring to “lexicographic” ordering, i.e., a sort order on functions. In other words, a function of two strings that says whether the first is “less than”, “equal to”, or “greater than” the second. Java’s <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html#compareTo-java.lang.String-"><code>String.compareTo</code></a> docs are quite clear.)</p>
+<p>Most of the complete details are in the <a href="https://github.com/fasiha/mudderjs">literate source</a>, which is actually very verbose 🙄. As usual, the literate methodology, of explaining in prose what I was doing and then showing code that did it, enormously decreased the activation energy to refactoring bad code—it’s more painful to contort one’s prose explanations to positively spin bad design than just to refactor.</p>
+<p>Near the end though, I tapered off with the literate code because I needed to get on with Real Life and use the library. I didn’t publish the library for this reason, but I’m happy to complete several tests, fix several bugs, and write up the API documentation to publish it now. Feel free to play with it below.</p>
+<pre class="js"><code class="hljs javascript"><span class="hljs-keyword">var</span> kangxi = <span class="hljs-string">`一丨丶丿乙亅二亠人儿入八冂冖冫几凵刀力勹匕匚匸十卜卩厂厶又口囗土士
+              夂夊夕大女子宀寸小尢尸屮山川工己巾干幺广廴廾弋弓彐彡彳心戈戶手支攴
+              文斗斤方无日曰月木欠止歹殳毋比毛氏气水火爪父爻爿片牙牛犬玄玉瓜瓦甘
+              生用田疋疒癶白皮皿目矛矢石示禸禾穴立竹米糸缶网羊羽老而耒耳聿肉臣自
+              至臼舌舛舟艮色艸虍虫血行衣襾見角言谷豆豕豸貝赤走足身車辛辰辵邑酉釆
+              里金長門阜隶隹雨青非面革韋韭音頁風飛食首香馬骨高髟鬥鬯鬲鬼魚鳥鹵鹿
+              麥麻黃黍黑黹黽鼎鼓鼠鼻齊齒龍龜龠`</span>.replace(<span class="hljs-regexp">/\s/g</span>, <span class="hljs-string">''</span>);
+<span class="hljs-keyword">var</span> rad = <span class="hljs-keyword">new</span> mudder.SymbolTable(kangxi);
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Confucius: '</span>, rad.stringToNumber(<span class="hljs-string">'子乚子'</span>));
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Billion:'</span>, rad.numberToString(<span class="hljs-number">1e9</span>));</code></pre>
+<hr>
+<p>Perhaps I can note here that I might have had a small role to play in introducing to Klipse’s Yehonathan Sharvit (<a href="https://twitter.com/viebel">@viebel</a>) the role <em>he</em> could play in giving voice once again to Alan Kay’s expectation of interactive computing. In <a href="http://blog.klipse.tech/javascript/2016/06/20/blog-javascript.html#alan-kays-vision">“A new way of blogging about javascript”</a>, @viebel quotes an <a href="http://www.drdobbs.com/architecture-and-design/interview-with-alan-kay/240003442?pgno=2">interview</a> where Kay uses Wikipedia to illustrate how unambitious our vision for learning and interacting with computers is:</p>
+<blockquote>
+<p>go to the article on Logo, can you write and execute Logo programs? Are there examples? No. The Wikipedia people didn’t even imagine that, in spite of the fact that they’re on a computer.</p>
+</blockquote>
+<p>Kay’s own <a href="https://youtu.be/Eg_ToU7m1MI?t=2m15s">presentations</a>, of course created and executed in Smalltalk VM, provided me with a visceral feeling of this disappointing lack of vision. For him, it’s obvious that we should illustrate our thinking right there, with examples in the same medium as the prose that expresses it. No, it does not make any sense to have to install a program, switch to a command-line, or open a new browser tab to try a programming language, or verify a numerical fact, or test an optical illusion as Kay does here.</p>
+<p>I see immediately-interactive code is the sister to literate programming. In the last couple of projects (e.g., <a href="../ebisu">Ebisu</a>) I’ve worked out a very opinionated, personalized workflow for the latter. In this webpage, I’m happy to acknowledge the fantastic work Klipse has done in making <a href="http://blog.klipse.tech/klipse/2017/03/28/klipse-explained.html">interactive JavaScript blogs</a> dead-simple. Kudos, Klipse!</p>
+<p>(That said, the Klipse plugin does weigh in at 1.1 MB minified (225 kB minified+gzipped). In case its download was blocked, the much smaller Mudder.js has been loaded into this window, and should be available in your browser’s JavaScript Console.)</p>
+<p>(Banner credit: self, with Gimp’s Flame effect.)</p>
+<script src="mudder.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://storage.googleapis.com/app.klipse.tech/css/codemirror.css">
+<script>
+window.klipse_settings = {
+  selector_eval_js: '.javascript',
+  };
+</script>
+<script src="https://storage.googleapis.com/app.klipse.tech/plugin_prod/js/klipse_plugin.min.js"></script>
+<p>
+<small>Previous: <a href="/md-site/post/japanese-study-books/">Japanese study books</a><br></small>
+</p>

@@ -107,7 +107,7 @@ find.file(/\.md$/, '.', md => {
       image : post.socialBanner || post.banner
     });
   });
-  Object.keys(tagsToMetas).forEach(tag => feed.addCategory(tag));
+  Object.keys(tagsToMetas).sort().forEach(tag => feed.addCategory(tag));
   fs.writeFileSync('atom.xml', feed.atom1());
 });
 
