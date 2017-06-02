@@ -1,0 +1,296 @@
+<!doctype html>
+<head><meta charset="utf-8" />
+<title>Works in progress</title>
+<link href="/md-site/atom.xml" type="application/atom+xml" rel="alternate" />
+<meta name="description" content="Posts I’m working on!" />
+<meta name="twitter:card" value="summary">
+<meta property="og:title" content="Works in progress" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="post/wip/index.html" />
+<meta property="og:image" content="bamboo.jpg" />
+<meta property="og:description" content="Posts I’m working on!" />
+<style>@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+  .parallax {
+    background-attachment: scroll;
+  }
+}
+
+pre,
+code {
+  font-family: Menlo, Monaco, Consolas, Inconsolata, "Andale Mono", "Fira Code", "Lucida Console", "Lucida Sans Typewriter", "Courier New", monospace;
+}
+
+pre {
+  padding: .5rem;
+  line-height: 1.25;
+  overflow-x: scroll;
+}
+
+a,
+a:visited {
+  color: #3498db;
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: #2980b9;
+}
+
+.modest-no-decoration {
+  text-decoration: none;
+}
+
+html {
+  font-size: 12px;
+}
+
+@media screen and (min-width: 32rem) and (max-width: 48rem) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 48rem) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  line-height: 1.85;
+}
+
+p,
+.modest-p {
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
+}
+
+h1,
+.modest-h1,
+h2,
+.modest-h2,
+h3,
+.modest-h3,
+h4,
+.modest-h4 {
+  margin: 1.414rem 0 .5rem;
+  font-weight: inherit;
+  line-height: 1.42;
+}
+
+h1,
+.modest-h1 {
+  margin-top: 0;
+  font-size: 3.998rem;
+}
+
+h2,
+.modest-h2 {
+  font-size: 2.827rem;
+}
+
+h3,
+.modest-h3 {
+  font-size: 1.999rem;
+}
+
+h4,
+.modest-h4 {
+  font-size: 1.414rem;
+}
+
+h5,
+.modest-h5 {
+  font-size: 1.121rem;
+}
+
+h6,
+.modest-h6 {
+  font-size: .88rem;
+}
+
+small,
+.modest-small {
+  font-size: .707em;
+}
+
+/* https://github.com/mrmrs/fluidity */
+
+img,
+canvas,
+iframe,
+video,
+svg,
+select,
+textarea {
+  max-width: 100%;
+}
+
+html {
+  font-size: 18px;
+  max-width: 100%;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  color: #444;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  margin: 0 auto;
+  max-width: 48rem;
+  line-height: 1.45;
+  padding: 0 .25rem .25rem;
+}
+
+h1,
+h2,
+h3 {
+  border-bottom: 2px solid #fafafa;
+  margin-bottom: 1.15rem;
+  padding-bottom: .5rem;
+  text-align: center;
+}
+
+blockquote {
+  border-left: 8px solid #fafafa;
+  padding: 1rem;
+}
+
+pre,
+code {
+  background-color: #fafafa;
+}
+
+figure {
+  position: relative;
+  text-align: center;
+}
+figcaption {
+  color: #999;
+  font-size: 0.9em;
+  margin-top: 0.5em;
+}
+
+/* https://css-tricks.com/full-width-containers-limited-width-parents/ */
+.full-width {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+.no-top {
+  margin-top: 0px;
+  padding-top:0px;
+}
+ul.top-nav {
+  padding-left: 0;
+}
+ul.top-nav li {
+  display: inline;
+  list-style-type: none;
+  padding-right: 1em;
+}
+table{
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+table th, table td{
+  border: 1px solid #eee;
+  padding: 6px 13px;
+}
+table tr:nth-child(2n) {
+  background-color: #f6f8f6;
+}
+</style>
+
+</head>
+<figure class="full-width no-top"><img src="bamboo.jpg"></figure>  <ul class="top-nav">
+    <li><a href="/md-site">Blog</a></li>
+    <li><a href="/md-site/#contact">Contact</a></li>
+    <li><a href="/md-site/atom.xml">Feed</a></li>
+  </ul><h1>Works in progress</h1><p><em>Updated on Fri, 02 Jun 2017 07:14:52 GMT, tagged with ‘meta’.</em></p><ul>
+<li><a href="https://github.com/fasiha/taylorwin.js">Taylorwin.js: sidelobe suppression taper windows in JavaScript.</a></li>
+<li><a href="https://gist.github.com/fasiha/d1e521c84b093e9756455d82f6482a38">Kuromoji in Clojure: parse Japanese with ease in a Lisp.</a></li>
+<li><a href="https://gist.github.com/fasiha/957035272009eb1c9eb370936a6af2eb">Pitch detection in Python using harmonic product spectra, and the Blackman-Tukey and Welch spectral estimators.</a></li>
+<li><a href="http://stackoverflow.com/a/38386589/500207">Time–frequency spectrograms in Matlab without toolboxes.</a></li>
+<li><a href="http://stackoverflow.com/a/38653131/500207">Find unique rows or columns in a Numpy array.</a></li>
+<li><a href="https://gist.github.com/fasiha/eff0763ca25777ec849ffead370dc907">Visualizing rectangular 2D arrays in Python/Matplotlib like Matlab’s <code>imagesc</code>.</a></li>
+<li><a href="https://gist.github.com/fasiha/31ce46c36371ff57fdbc1254af424174">Anki’s spacing interval calculation in simple terms.</a></li>
+<li><a href="https://github.com/fasiha/satellite-projection-parameter-estimation">Estimate the parameters of a map’s satellite projection, using nonlinear least-squares.</a></li>
+<li><a href="https://github.com/fasiha/steppe-map">Use nonlinear least-squares to find <em>any</em> map’s projection and projection parameters.</a></li>
+<li><a href="https://fasiha.github.io/daycin/Apps/">Explore the terrain of the Dayton–Cincinnati corridor, Ohio, USA in gorgeous texture-shaded USGS NED.</a> (See the <a href="../texshade">texshade tutorial</a>.)</li>
+<li><a href="http://fasiha.github.io/kanjiyears/">KanjiYears: break down Japanese corpus by school grade.</a></li>
+<li><a href="http://fasiha.github.io/kanjiwild/">Kanjiwild: web-based Japanese kanji recognition training.</a></li>
+<li><a href="http://fasiha.github.io/kanjivg-explorer/">KanjiVG Explorer: visualizing Japanese kanji component networks.</a></li>
+<li>Emscripted! C-to-JavaScript cross-compiles via the amazing <a href="https://github.com/kripken/emscripten">Emscripten</a> project:
+<ul>
+<li><a href="https://fasiha.github.io/mecab-emscripten/">MeCab: Japanese morphological parser and part-of-speech tagger, by Taku Kudo et al.</a></li>
+<li><a href="https://fasiha.github.io/idsgrep-emscripten/">IDSgrep: grep-like querying for Chinese character component databases, by Matthew Skala.</a></li>
+</ul></li>
+</ul>
+<p>(Banner image credit: Ioan Sameli, <em>Bamboo scaffolding in Hong Kong</em>. <a href="https://www.flickr.com/photos/biwook/390088839/">Flickr</a>.)</p>
+<p>
+<small>Previous: <a href="/md-site/post/mudder/">Announcing: Mudder.js</a><br></small>
+</p>

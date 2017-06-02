@@ -37,6 +37,6 @@ I’m a “he/him”, with no PhD or academic post, so don’t “Doctor” or �
 
 ## Acknowledgements
 
-Pandoc is good. [Modest](https://markdowncss.github.io/modest/) CSS is great.
+Pandoc is good. [Modest](https://markdowncss.github.io/modest/) CSS is great. We also use Klipse for interactive code execution, highlight.js for syntax highlighting, JSDOM for server-side rendering as much as we can, and MathJax and mathjax-node-page for equations.
 
-Banner image credit: self, at Glen Helen Nature Preserve, Yellow Springs, Ohio, USA.
+(Image credits: banner—self, at Glen Helen Nature Preserve, Yellow Springs, Ohio, USA. Family—self.)
